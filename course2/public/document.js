@@ -21,6 +21,7 @@ let updateFailTriesCount = function(fails){
 let showPopover = function($element, message) {
   $element.popover({
     trigger: 'manual',
+    placement: 'top',
     content: message
   }).popover('show');
   setTimeout(() => {
@@ -37,8 +38,12 @@ let guessLetter = function(game){
     if (letterIsGuessed) {
       // TODO update the view with the new word state
       // TODO update the score
+      showPopover($('#word'), 'Word updated!');
+      $('#inputLetter').val('').focus();
     } else {
       // TODO update the trial count
+      showPopover($('#inputLetter'), 'The letter was incorrect!');
+      $('#inputLetter').focus().select();
     }
     let wordIsGuessed = false; // TODO check if the word is guessed
     let gameIsOver = false; // TODO check if the game is over
@@ -49,8 +54,8 @@ let guessLetter = function(game){
     }
   } else {
     showPopover($('#inputLetter'), 'The input is not a valid letter');
+    $('#inputLetter').focus().select();
   }
-  $('#inputLetter').focus().select();
 };
 
 function startGame(game) {
