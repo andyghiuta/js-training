@@ -3,26 +3,27 @@ let guessTheWord = function(){
   // "config" options
   const MAX_TRIES = 6;
   const BONUS_PER_LETTER = 5; // bitcoins
-  // declare an object for "word list"
-  // keep a reference for the currently selected word
-  // declare an object for the current state of the word
+  // TODO declare an object for "word list"
+  // TODO keep a reference for the currently selected word
+  // TODO declare an object for the current state of the word
+  // TODO declare a function that generates a random integer between two numbers
 
-  // declare a function that generates a random integer between two numbers
   
   // initialize the guessing game
   let init = function() {
+    // TODO implement this function
     // reset game state
     // randomly pick a word from the word list
-    // return the number of letters in the word
+    // return the current state of the word
   };
 
   // will receive a letter as argument and will return the updated state
   let guessLetter = function() {
-
+    // TODO implement this function
   };
 
   let isValidLetter = function() {
-
+    // TODO implement this function
   };
 
   // return an object with the functions we want exposed
@@ -47,14 +48,25 @@ $(document).ready(function(){
       wordLetters += `<span class="badge badge-secondary">${letter}</span>\n`;
     });
     $('#word').html(wordLetters);
-  }
+  };
 
   // update the view with the initial word state
   updateWord(initialWordState);
 
-  // update score function
+  // function to update score function
   let updateScore = function(newScore){
       $('#staticScore').val(newScore);
+  };
+
+
+  let showPopover = function($element, message) {
+    $element.popover({
+      trigger: 'manual',
+      content: message
+    }).popover('show');
+    setTimeout(() => {
+      $element.popover('hide');
+    }, 5000);
   };
 
   // guess button click handler
@@ -62,17 +74,18 @@ $(document).ready(function(){
     let guessedLetter = $('#inputLetter').val();
     // check the input of the letter
     if (game.isValidLetter(guessedLetter)) {
-      // guess letter
-      // update the view with the new word state
-      // update the score
+      // TODO guess letter
+      // TODO update the view with the new word state
+      // TODO update the score
+      let wordIsGuessed = false; // TODO check if the word is guessed
+      let gameIsOver = false; // TODO check if the game is over
+      if (wordIsGuessed) {
+
+      } else if (gameIsOver) {
+
+      }
     } else {
-      $('#inputLetter').popover({
-        trigger: 'manual',
-        content: 'The input is not a valid letter'
-      }).popover('show');
-      setTimeout(() => {
-        $('#inputLetter').popover('hide');
-      }, 5000);
+      showPopover($('#inputLetter'), 'The input is not a valid letter');
     }
   });
 
