@@ -44,7 +44,7 @@ $(document).ready(function(){
 
   let updateWord = function(word){
     let wordLetters = '';
-    word.forEach((letter) => {
+    word.split('').forEach((letter) => {
       wordLetters += `<span class="badge badge-secondary">${letter}</span>\n`;
     });
     $('#word').html(wordLetters);
@@ -87,6 +87,7 @@ $(document).ready(function(){
     } else {
       showPopover($('#inputLetter'), 'The input is not a valid letter');
     }
+    $('#inputLetter').focus();
   });
 
 });
