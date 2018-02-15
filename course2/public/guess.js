@@ -13,19 +13,40 @@ let guessTheWord = function () {
 	
 	let getRandomWords = function(){
 		// randomly pick a word from the word list
-		let getCategory = function(){
-			let randomCategory = Math.floor(Math.random() * Object.keys(wordsToGuess).length),
-				selectedCategory = Object.values(wordsToGuess)[randomCategory],
-				randomWord = Math.floor(Math.random() * Object.values(Object.values(wordsToGuess)[randomCategory])[0].length);
-				
-			console.log(Object.values(Object.values(wordsToGuess)[randomCategory])[0][randomWord]);
-			
-			console.log()
-			
+		
+		let randomCategoryKey   = Math.floor(Math.random() * Object.keys(wordsToGuess).length), //get a random key between 0 and object length
+			randomWordKey       = Math.floor(Math.random() * Object.values(Object.values(wordsToGuess)[randomCategoryKey])[0].length), //get a random key between 0 and the length of words array from the category
+			randomCategory      = Object.keys(Object.values(wordsToGuess)[randomCategoryKey]).join(''), //get the category name which was choosed randomly
+			randomWord          = Object.values(Object.values(wordsToGuess)[randomCategoryKey])[0][randomWordKey].split(' '); //get the word from that cathegory which was choosed randomly
+		
+		return [randomCategory, randomWord];
+	};
+	
+	let placeTheWords = function(){
+		let categoryTag = document.getElementById('categoryOffer'),
+			wordTag = document.getElementById('wordToGuess'),
+			[categoryName, wordToGuess] = getRandomWords(),
+			getTheWordArray = '';
+		
+		categoryTag.innerHTML = categoryName;
+		
+		let splitToarray = function(stringToSplit){
+			[...getTheWordArray] = stringToSplit.toString();
+			return getTheWordArray;
 		}
 		
-		console.log(getCategory());
-	}
+		var wordHtml = "";
+		
+		splitToarray(wordToGuess).map(function(value, index){
+			if(value !== ","){
+				wordHtml+=`<span>${value}</span>`;
+			}else{
+				wordHtml+='<span class="separator">-</span>';
+			}
+		});
+		
+		wordTag.innerHTML = wordHtml;
+	};
 	
 	// initialize the guessing game
 	let init = function () {
@@ -35,7 +56,7 @@ let guessTheWord = function () {
 		
 		// return the current state of the word
 		
-		getRandomWords();
+		placeTheWords();
 	};
 	
 	// will receive a letter as argument and will return the updated state
