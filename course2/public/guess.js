@@ -5,6 +5,9 @@ let guessTheWord = function () {
 	// "config" options
 	const MAX_FAILS = 6;
 	const BONUS_PER_LETTER = 5; // bitcoins
+	const chosenWord = [];
+	
+	
 	// TODO declare an object for "word list"
 	// TODO keep a reference for the currently selected word
 	// TODO declare an object for the current state of the word
@@ -26,7 +29,8 @@ let guessTheWord = function () {
 		let categoryTag = document.getElementById('categoryOffer'),
 			wordTag = document.getElementById('wordToGuess'),
 			[categoryName, wordToGuess] = getRandomWords(),
-			getTheWordArray = '';
+			getTheWordArray = '',
+			wordHtml = '';
 		
 		categoryTag.innerHTML = categoryName;
 		
@@ -35,10 +39,9 @@ let guessTheWord = function () {
 			return getTheWordArray;
 		}
 		
-		var wordHtml = "";
-		
 		splitToarray(wordToGuess).map(function(value, index){
 			if(value !== ","){
+				//wordHtml+=`<span>.</span>`;
 				wordHtml+=`<span>${value}</span>`;
 			}else{
 				wordHtml+='<span class="separator">-</span>';
@@ -46,6 +49,9 @@ let guessTheWord = function () {
 		});
 		
 		wordTag.innerHTML = wordHtml;
+		
+		//Keep it globally for other functions
+		chosenWord.push(wordToGuess);
 	};
 	
 	// initialize the guessing game
@@ -55,20 +61,74 @@ let guessTheWord = function () {
 		// reset game state
 		
 		// return the current state of the word
-		
 		placeTheWords();
+		guessLetter();
 	};
 	
 	// will receive a letter as argument and will return the updated state
 	let guessLetter = function () {
 		// TODO implement this function
+		
+		let errMsgField = $("#errorMsg"),
+			trigger = $('#guess');
+		
+		let getLetterPosition = function(letter){
+			for (var i=0; i<= chosenWord[0].length; i++){
+				console.log(chosenWord[0].length);
+			}
+		}
+		
+		trigger.on('click', function(){
+			let inputField = document.getElementById('inputLetter'),
+				letterAttemp = inputField.value;
+			
+			if(isValidLetter(letterAttemp)[0].length >= 1){
+				let errMsg = isValidLetter(letterAttemp)[0].toString();
+				errMsgField.html(errMsg);
+			}else{
+				
+				let regex = new RegExp(letterAttemp, 'gi'),
+					matches = chosenWord[0].toString().match(regex);
+				
+					getLetterPosition(letterAttemp);
+				
+				if((matches) !== null){
+					//console.log(chosenWord[0].toString().match(regex));
+					
+				}else{
+					console.log('out')
+				}
+				
+				/*if(chosenWord[0].toString().includes(letterAttemp)){
+					
+					console.log(chosenWord.toString().indexOf(letterAttemp))
+				}else{
+					console.log('out')
+				}*/
+				
+			}
+		});
+		
+		/*if(errCount > 0){
+			errMsgField.innerHTML = 'Please provide a valid letter';
+		}*/
+		
 	};
 	
-	let isValidLetter = function () {
+	let isValidLetter = function (letter) {
 		// TODO implement this function
-		let letter = document.getElementById('inputLetter').value();
-		console.log(letter);
+		let errCount = 0,
+			errMsg = [];
 		
+		if(letter == ''){
+			errCount +=1;
+			errMsg.push('You have to provide a letter first');
+		}else if(!isNaN(letter)){
+			errCount+=1;
+			errMsg.push('Only letters are allowed');
+		}
+		
+		return  [errMsg, errCount];
 	};
 	
 	// return an object with the functions we want exposed
