@@ -36,18 +36,24 @@
               <span>Guess</span>
               <span id="categoryOffer"></span>
             </h4>
-            <div id="wordToGuess" class="word-holder">
-              <span>R</span>
+            <div id="wordToGuess" class="word-holder"></div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <label>Letters you tried so far</label>
+                <div id="letterAttemps"></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div class="row">
-        
-        <div class="col-2">
+        <div class="col-4">
           <div class="form-group">
             <label for="inputLetter">Enter your letter:</label>
-            <input type="text" class="form-control" id="inputLetter" />
+            <input type="text" class="form-control" id="inputLetter" maxlength="1" />
+            <span class="error" id="errorMsg"></span>
           </div>
           <button type="button" class="btn btn-primary" id="guess">Guess!</button>
         </div>
