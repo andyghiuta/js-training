@@ -41,8 +41,7 @@ let guessTheWord = function () {
 		
 		splitToarray(wordToGuess).map(function(value, index){
 			if(value !== ","){
-				//wordHtml+=`<span>.</span>`;
-				wordHtml+=`<span>${value}</span>`;
+				wordHtml+=`<span>.</span>`;
 			}else{
 				wordHtml+='<span class="separator">-</span>';
 			}
@@ -70,17 +69,14 @@ let guessTheWord = function () {
 		// TODO implement this function
 		
 		let errMsgField = $("#errorMsg"),
-			trigger = $('#guess');
-		
-		let getLetterPosition = function(letter){
-			for (var i=0; i<= chosenWord[0].length; i++){
-				console.log(chosenWord[0].length);
-			}
-		}
+			trigger = $('#guess'),
+			wordToParse = chosenWord[0].toString(),
+			lettersGuessed = [];
 		
 		trigger.on('click', function(){
 			let inputField = document.getElementById('inputLetter'),
 				letterAttemp = inputField.value;
+			$("#errorMsg").text("");
 			
 			if(isValidLetter(letterAttemp)[0].length >= 1){
 				let errMsg = isValidLetter(letterAttemp)[0].toString();
@@ -88,31 +84,35 @@ let guessTheWord = function () {
 			}else{
 				
 				let regex = new RegExp(letterAttemp, 'gi'),
-					matches = chosenWord[0].toString().match(regex);
-				
-					getLetterPosition(letterAttemp);
+					matches = chosenWord[0].toString().match(regex),
+					wordVariant = [],
+					html = "";
 				
 				if((matches) !== null){
-					//console.log(chosenWord[0].toString().match(regex));
+					[...chosenArray] = chosenWord[0].toString();
+					lettersGuessed.push(letterAttemp);
+
+					chosenArray.map(function(value){
+						
+						if(lettersGuessed.indexOf(value) != -1){
+							wordVariant.push(value);
+						}else if(value !== ',') {
+							wordVariant.push('.')
+						}else{
+							wordVariant.push(',')
+						}
+					});
 					
+					$.each(wordVariant, function(index, value){
+						html += `<span>${value}</span>`;
+					})
+					
+					$("#wordToGuess").html(html);
 				}else{
-					console.log('out')
+					$("#errorMsg").text("Mai incearca");
 				}
-				
-				/*if(chosenWord[0].toString().includes(letterAttemp)){
-					
-					console.log(chosenWord.toString().indexOf(letterAttemp))
-				}else{
-					console.log('out')
-				}*/
-				
 			}
 		});
-		
-		/*if(errCount > 0){
-			errMsgField.innerHTML = 'Please provide a valid letter';
-		}*/
-		
 	};
 	
 	let isValidLetter = function (letter) {
