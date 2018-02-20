@@ -14,18 +14,18 @@ let guessTheWord = function () {
 	// TODO declare a function that generates a random integer between two numbers
 	
 	
-	let getRandomWords = function(){
+	let getRandomWords = function () {
 		// randomly pick a word from the word list
 		
-		let randomCategoryKey   = Math.floor(Math.random() * Object.keys(wordsToGuess).length), //get a random key between 0 and object length
-			randomWordKey       = Math.floor(Math.random() * Object.values(Object.values(wordsToGuess)[randomCategoryKey])[0].length), //get a random key between 0 and the length of words array from the category
-			randomCategory      = Object.keys(Object.values(wordsToGuess)[randomCategoryKey]).join(''), //get the category name which was choosed randomly
-			randomWord          = Object.values(Object.values(wordsToGuess)[randomCategoryKey])[0][randomWordKey].split(' '); //get the word from that cathegory which was choosed randomly
+		let randomCategoryKey = Math.floor(Math.random() * Object.keys(wordsToGuess).length), //get a random key between 0 and object length
+			randomWordKey = Math.floor(Math.random() * Object.values(Object.values(wordsToGuess)[randomCategoryKey])[0].length), //get a random key between 0 and the length of words array from the category
+			randomCategory = Object.keys(Object.values(wordsToGuess)[randomCategoryKey]).join(''), //get the category name which was choosed randomly
+			randomWord = Object.values(Object.values(wordsToGuess)[randomCategoryKey])[0][randomWordKey].split(' '); //get the word from that cathegory which was choosed randomly
 		
 		return [randomCategory, randomWord];
 	};
 	
-	let placeTheWords = function(){
+	let placeTheWords = function () {
 		let categoryTag = document.getElementById('categoryOffer'),
 			wordTag = document.getElementById('wordToGuess'),
 			[categoryName, wordToGuess] = getRandomWords(),
@@ -34,16 +34,16 @@ let guessTheWord = function () {
 		
 		categoryTag.innerHTML = categoryName;
 		
-		let splitToarray = function(stringToSplit){
+		let splitToarray = function (stringToSplit) {
 			[...getTheWordArray] = stringToSplit.toString();
 			return getTheWordArray;
 		}
 		
-		splitToarray(wordToGuess).map(function(value, index){
-			if(value !== ","){
-				wordHtml+=`<span>.</span>`;
-			}else{
-				wordHtml+='<span class="separator">-</span>';
+		splitToarray(wordToGuess).map(function (value, index) {
+			if (value !== ",") {
+				wordHtml += `<span>.</span>`;
+			} else {
+				wordHtml += '<span class="separator">-</span>';
 			}
 		});
 		
@@ -71,45 +71,52 @@ let guessTheWord = function () {
 		let errMsgField = $("#errorMsg"),
 			trigger = $('#guess'),
 			wordToParse = chosenWord[0].toString(),
-			lettersGuessed = [];
+			lettersGuessed = [],
+			failAttemp = 1,
+			currentScore = 0,
+			failLetters = [];
 		
-		trigger.on('click', function(){
+		trigger.on('click', function () {
 			let inputField = document.getElementById('inputLetter'),
 				letterAttemp = inputField.value;
 			$("#errorMsg").text("");
 			
-			if(isValidLetter(letterAttemp)[0].length >= 1){
+			if (isValidLetter(letterAttemp)[0].length >= 1) {
 				let errMsg = isValidLetter(letterAttemp)[0].toString();
 				errMsgField.html(errMsg);
-			}else{
-				
+			} else {
 				let regex = new RegExp(letterAttemp, 'gi'),
 					matches = chosenWord[0].toString().match(regex),
 					wordVariant = [],
 					html = "";
 				
-				if((matches) !== null){
+				if ((matches) !== null) {
+					currentScore += matches.length;
+					updateScore(currentScore);
+					
 					[...chosenArray] = chosenWord[0].toString();
 					lettersGuessed.push(letterAttemp);
-
-					chosenArray.map(function(value){
+					
+					
+					chosenArray.map(function (value) {
 						
-						if(lettersGuessed.indexOf(value) != -1){
+						if (lettersGuessed.indexOf(value) != -1) {
 							wordVariant.push(value);
-						}else if(value !== ',') {
+						} else if (value !== ',') {
 							wordVariant.push('.')
-						}else{
+						} else {
 							wordVariant.push(',')
 						}
 					});
 					
-					$.each(wordVariant, function(index, value){
+					$.each(wordVariant, function (index, value) {
 						html += `<span>${value}</span>`;
 					})
 					
 					$("#wordToGuess").html(html);
-				}else{
-					$("#errorMsg").text("Mai incearca");
+				} else {
+					failLetters.push(letterAttemp);
+					updateFailTriesCount(failAttemp++, failLetters);
 				}
 			}
 		});
@@ -120,15 +127,15 @@ let guessTheWord = function () {
 		let errCount = 0,
 			errMsg = [];
 		
-		if(letter == ''){
-			errCount +=1;
+		if (letter == '') {
+			errCount += 1;
 			errMsg.push('You have to provide a letter first');
-		}else if(!isNaN(letter)){
-			errCount+=1;
+		} else if (!isNaN(letter)) {
+			errCount += 1;
 			errMsg.push('Only letters are allowed');
 		}
 		
-		return  [errMsg, errCount];
+		return [errMsg, errCount];
 	};
 	
 	// return an object with the functions we want exposed
@@ -139,7 +146,7 @@ let guessTheWord = function () {
 	};
 };
 
-$(document).ready(function(){
+$(document).ready(function () {
 	let game = guessTheWord();
 	game.init();
 })
