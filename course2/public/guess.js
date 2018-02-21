@@ -6,6 +6,7 @@ let guessTheWord = function () {
 	const MAX_FAILS = 6;
 	const BONUS_PER_LETTER = 5; // bitcoins
 	const chosenWord = [];
+	let isGameFinished = false;
 	
 	
 	// TODO declare an object for "word list"
@@ -92,17 +93,20 @@ let guessTheWord = function () {
 					wordVariant = [],
 					html = "";
 				
-				//console.log(wordVariant);
-				
+				let checkAttemp = function (letter) {
+					if (lettersGuessed.indexOf(letter) !== -1) {
+						return 1;
+					} else {
+						return -1;
+					}
+				};
 
-				/*if(wordVariant.indexOf(letterAttemp) != -1){
-					console.log(letterAttemp);
-					showPopover('#errorMsg', `You already intered the letter ${letterAttemp} once`)
-				}*/
-				
 				if ((matches) !== null) {
-					currentScore += matches.length;
-					updateScore(currentScore);
+					if (checkAttemp(letterAttemp) == -1) {
+						lettersGuessed.push(letterAttemp);
+						currentScore += matches.length;
+						updateScore(currentScore);
+					}
 					
 					let chosenWordToArray = [...chosenWord[0].toString()];
 					
@@ -125,11 +129,24 @@ let guessTheWord = function () {
 							html += `<span class="separator">-</span>`
 						}
 					});
+
+					if (wordVariant.indexOf('.') == -1) {
+						 //gameFinished();
+						 console.log('Here it should end');
+						 isGameFinished = true;
+					 }
 					
 					$("#wordToGuess").html(html);
 				} else {
-					failLetters.push(letterAttemp);
-					updateFailTriesCount(failAttemp++, failLetters);
+					if (failAttemp >= MAX_FAILS) {
+						failLetters = [];
+						$('#mainMsg').text('GAME OVER');
+						isGameFinished = true;
+					}else{
+						failLetters.push(letterAttemp);
+						updateFailTriesCount(MAX_FAILS - failAttemp, failLetters);
+						failAttemp++;
+					}
 				}
 			}
 		});
