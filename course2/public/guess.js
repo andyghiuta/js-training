@@ -35,7 +35,7 @@ let guessTheWord = function () {
 		categoryTag.innerHTML = categoryName;
 		
 		let splitToarray = function (stringToSplit) {
-			[...getTheWordArray] = stringToSplit.toString();
+			getTheWordArray = [...stringToSplit.toString()];
 			return getTheWordArray;
 		}
 		
@@ -79,6 +79,7 @@ let guessTheWord = function () {
 		trigger.on('click', function () {
 			let inputField = document.getElementById('inputLetter'),
 				letterAttemp = inputField.value;
+			inputField.focus();
 			inputField.value = '';
 			
 			
@@ -93,7 +94,7 @@ let guessTheWord = function () {
 				
 				//console.log(wordVariant);
 				
-			x
+
 				/*if(wordVariant.indexOf(letterAttemp) != -1){
 					console.log(letterAttemp);
 					showPopover('#errorMsg', `You already intered the letter ${letterAttemp} once`)
