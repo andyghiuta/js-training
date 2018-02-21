@@ -62,9 +62,61 @@ let guessTheWord = function () {
 		
 		// return the current state of the word
 		placeTheWords();
-		guessLetter();
+		//guessLetter();
+		//wordToBeGuessed();
+		fireEvent();
 	};
-	
+
+
+	let wordToBeGuessed = function(letter){
+		let wordToArray = [...chosenWord.toString()],
+			guessedLetters = [],
+			failAttemps = 0,
+			formattedWord = [];
+
+
+		let found = wordToArray.some(r=> letter.includes(r));
+
+		console.log(letter, found);
+
+		if(found){
+			guessedLetters.push(letter);
+
+			console.log(guessedLetters);
+
+			wordToArray.map(function (value) {
+
+
+
+				/*if(value == ','){
+					formattedWord.push('-')
+				}else if(value == letter){
+					formattedWord.push(letter);
+				}else{
+					formattedWord.push('.');
+				}*/
+			});
+		}else{
+			failAttemps++;
+		}
+
+		return failAttemps, formattedWord;
+	};
+
+
+	let fireEvent = function(){
+		let letter = [];
+		$('#inputLetter').on('keyup', function(){
+			letter.push($(this).val());
+
+			console.log(wordToBeGuessed($(this).val()))
+
+			$(this).val('');
+
+
+		})
+	}
+
 	// will receive a letter as argument and will return the updated state
 	let guessLetter = function () {
 		// TODO implement this function
@@ -156,7 +208,6 @@ let guessTheWord = function () {
 		});
 	};
 
-
 	let gameOver = function(status){
 		$('#staticScore').val('-')
 		$('#staticTries').val(MAX_FAILS);
@@ -182,7 +233,6 @@ let guessTheWord = function () {
 			.text('Reset the game')
 	}
 
-	
 	let isValidLetter = function (letter) {
 		// TODO implement this function
 		let errCount = 0,
