@@ -172,12 +172,12 @@ let guessTheWord = function () {
 		let resetBtn = $('#guess');
 
 		resetBtn
-			.unbind('click')
 			.on('click', function(){
 				$(this).text('Guess!');
 				$('#mainMsg').text('Guess the word GAME!');
 				$('#inputLetter').focus();
-				init();
+				placeTheWords();
+				guessLetter();
 			})
 			.text('Reset the game')
 	}
