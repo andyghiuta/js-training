@@ -6,7 +6,7 @@ let guessTheWord = function () {
 	const MAX_FAILS = 6;
 	const BONUS_PER_LETTER = 5; // bitcoins
 	const chosenWord = [];
-	let isGameFinished = false;
+	let isGameOver = false;
 	
 	
 	// TODO declare an object for "word list"
@@ -73,23 +73,25 @@ let guessTheWord = function () {
 			trigger = $('#guess'),
 			wordToParse = chosenWord[0].toString(),
 			lettersGuessed = [],
-			failAttemp = 1,
+			failAttemp = 0,
 			currentScore = 0,
 			failLetters = [];
-		
+
+		$('#staticTries').val(MAX_FAILS);
+
 		trigger.on('click', function () {
 			let inputField = document.getElementById('inputLetter'),
-				letterAttemp = inputField.value;
+				letterAttemp = inputField.value.toLowerCase();
+
 			inputField.focus();
 			inputField.value = '';
-			
 			
 			if (isValidLetter(letterAttemp)[0].length >= 1) {
 				let errMsg = isValidLetter(letterAttemp)[0].toString();
 				errMsgField.html(errMsg);
 			} else {
 				let regex = new RegExp(letterAttemp, 'gi'),
-					matches = chosenWord[0].toString().match(regex),
+					matches = wordToParse.match(regex),
 					wordVariant = [],
 					html = "";
 				
@@ -108,11 +110,12 @@ let guessTheWord = function () {
 						updateScore(currentScore);
 					}
 					
-					let chosenWordToArray = [...chosenWord[0].toString()];
+					let chosenWordToArray = [...wordToParse.toString()];
 					
 					lettersGuessed.push(letterAttemp);
 					
 					chosenWordToArray.map(function (value) {
+						value = value.toLowerCase();
 						if (lettersGuessed.indexOf(value) != -1) {
 							wordVariant.push(value);
 						} else if (value !== ',') {
@@ -131,26 +134,54 @@ let guessTheWord = function () {
 					});
 
 					if (wordVariant.indexOf('.') == -1) {
-						 //gameFinished();
-						 console.log('Here it should end');
-						 isGameFinished = true;
+						gameOver(true);
 					 }
-					
+
 					$("#wordToGuess").html(html);
+
 				} else {
+
 					if (failAttemp >= MAX_FAILS) {
 						failLetters = [];
 						$('#mainMsg').text('GAME OVER');
-						isGameFinished = true;
+						gameOver(false);
+
 					}else{
 						failLetters.push(letterAttemp);
-						updateFailTriesCount(MAX_FAILS - failAttemp, failLetters);
-						failAttemp++;
 					}
+
+					updateFailTriesCount(MAX_FAILS - (++failAttemp), failLetters);
 				}
 			}
 		});
 	};
+
+
+	let gameOver = function(status){
+		$('#staticScore').val('-')
+		$('#staticTries').val(MAX_FAILS);
+
+		isGameOver = false;
+
+		if(!status){
+			$('#mainMsg').text('Sorry, you loose!');
+		}else{
+			$('#mainMsg').text('Congrats, you win!');
+		}
+
+		let resetBtn = $('#guess');
+
+		resetBtn
+			.unbind('click')
+			.on('click', function(){
+				$(this).text('Guess!');
+				$('#mainMsg').text('Guess the word GAME!');
+				$('#inputLetter').focus();
+				init();
+			})
+			.text('Reset the game')
+	}
+
 	
 	let isValidLetter = function (letter) {
 		// TODO implement this function
@@ -170,9 +201,7 @@ let guessTheWord = function () {
 	
 	// return an object with the functions we want exposed
 	return {
-		init/*,
-		guessLetter,
-		isValidLetter*/
+		init
 	};
 };
 
