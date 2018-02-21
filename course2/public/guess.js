@@ -79,7 +79,8 @@ let guessTheWord = function () {
 		trigger.on('click', function () {
 			let inputField = document.getElementById('inputLetter'),
 				letterAttemp = inputField.value;
-			$("#errorMsg").text("");
+			inputField.value = '';
+			
 			
 			if (isValidLetter(letterAttemp)[0].length >= 1) {
 				let errMsg = isValidLetter(letterAttemp)[0].toString();
@@ -90,16 +91,23 @@ let guessTheWord = function () {
 					wordVariant = [],
 					html = "";
 				
+				//console.log(wordVariant);
+				
+			x
+				/*if(wordVariant.indexOf(letterAttemp) != -1){
+					console.log(letterAttemp);
+					showPopover('#errorMsg', `You already intered the letter ${letterAttemp} once`)
+				}*/
+				
 				if ((matches) !== null) {
 					currentScore += matches.length;
 					updateScore(currentScore);
 					
-					[...chosenArray] = chosenWord[0].toString();
+					let chosenWordToArray = [...chosenWord[0].toString()];
+					
 					lettersGuessed.push(letterAttemp);
 					
-					
-					chosenArray.map(function (value) {
-						
+					chosenWordToArray.map(function (value) {
 						if (lettersGuessed.indexOf(value) != -1) {
 							wordVariant.push(value);
 						} else if (value !== ',') {
@@ -110,8 +118,12 @@ let guessTheWord = function () {
 					});
 					
 					$.each(wordVariant, function (index, value) {
-						html += `<span>${value}</span>`;
-					})
+						if(value!== ",") {
+							html += `<span>${value}</span>`;
+						}else{
+							html += `<span class="separator">-</span>`
+						}
+					});
 					
 					$("#wordToGuess").html(html);
 				} else {
