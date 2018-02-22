@@ -22,3 +22,15 @@
     color: #6c757d;
     background: transparent;
 }
+
+.form-control:readonly:focus{
+
+}
+
+.form-control:disabled:focus, .form-control[readonly]:focus{
+
+	border: 1px solid #ced4da;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+}

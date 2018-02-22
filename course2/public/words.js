@@ -1,9 +1,9 @@
 let wordsToGuess = {
 	computers: {
 		"the computer brand name": [
-			"ds d",
-			/*"dell",*/
-			/*"ibm",
+			"Ds d",
+			"dell",
+			"ibm",
 			"lenovo",
 			"apple",
 			"asus",
@@ -16,10 +16,9 @@ let wordsToGuess = {
 			"hewlett packard",
 			"alienware",
 			"dota",
-			"doom"*/
-
+			"doom"
 		]
-	}/*,
+	},
 	games: {
 		"the game": [
 			"counter strike",
@@ -52,5 +51,5 @@ let wordsToGuess = {
 			"clementines",
 			"chocolate"
 		]
-	}*/
+	}
 }
