@@ -25,61 +25,22 @@ let leapYear = function () {
 };
 
 let fibonacci = function () {
-	
-	// read the input value
 	let number = getInputValue(this);
-	
-	// TODO: calculate the output somehow
-	let output = '',
-		sequence = [],
-		mem = 1,
-		fib = [0,1,1,2];
-	
-	let getTheNumbersPriorTo = () =>{
-		
-		while(mem <=number){
-			mem = mem + fib[fib.length-1];
-			fib.push(mem);
-			mem++;
+
+	let getFibPriorTo = (value) =>{
+		let mem = 1,
+			fib = [0,1];
+
+		while(mem <=value){
+			mem += fib[fib.length-2];
+			if(mem<=value){
+				fib.push(mem);
+			}
 		}
-		console.log(fib);
-		/*for(var i =0; i<=number;i++){
-			
-			mem = fib[fib.length - 1] + mem;
-			//sequence.push(i);
-		}*/
-		
-		/*for(var j=0; j<number; j++){
-			mem = fib[fib.length - 1] + sequence[j];
-			fib.push(mem);
-			console.log(mem);
-			
-			/!*while(j<=(sequence[j+1] + sequence[j])){
-			
-			}*!/
-			
-			//mem = sequence[j] + sequence[j+1];
-			//fib.push(sequence[j] + sequence[j+1]);
-			
-		};*/
-		
-		/*while(i<=3){
-			mem = i + mem;
-			sequence.push(mem);
-		}*/
-		//console.log(fib);
+		return fib;
 	};
-	
-	
-	getTheNumbersPriorTo();
-	
-	
-	/*let  fib = function(n) {
-		return n < 2 ? n : fib(n - 1) + fib(n - 2);
-	};*/
-	
-	// set the output value
-	setOutputValue(this, output);
+
+	setOutputValue(this, getFibPriorTo(number).join(','));
 };
 
 let reverseString = function(){
