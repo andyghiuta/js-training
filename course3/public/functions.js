@@ -55,20 +55,14 @@ let isPalindrom = function(){
 		//Create array from the given string
 		let input = getInputValue(this);
 
-		//and reverse it
+		//And reverse it
 		let reversedInput = input.split('').reverse().join('');
 
-		//compare the letters from the first array with it's reversed array
-		for(var i=0; i<reversedInput.length; i++){
-			return true ? input[i] == reversedInput[i] : false;
-		}
+		//And compare them
+		return input === reversedInput;
 	};
-	
-	if (true === compareletters()) {
-		setOutputValue(this, "Palindrom");
-	} else {
-		setOutputValue(this, "Not palindrom");
-	}
+
+	setOutputValue(this, true === compareletters() ? "Palindrom" : "Not Palindrom");
 };
 
 
