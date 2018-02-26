@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css" type="text/css" media="all">
 
   <title>Course 2 - Word Guessing Game</title>
 </head>
@@ -15,7 +16,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col">
-          <h1>Guess the word GAME!</h1>
+          <h1 id="mainMsg">Guess the word GAME!</h1>
         </div>
       </div>
       <div class="row">
@@ -29,12 +30,36 @@
         <div class="col">&nbsp;</div>
       </div>
       <div class="row">
-        <div class="col-2">
+        <div class="col-12">
+          <div class="form-group word-offer">
+            <h4>
+              <span>Guess</span>
+              <span id="categoryOffer"></span>
+            </h4>
+            <div id="wordToGuess" class="word-holder"></div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <label>Letters you tried so far</label>
+                <div class="row">
+                  <div class="col-8">
+                      <input class="form-control" type="text" id="letterAttemps" readonly>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
           <div class="form-group">
             <label for="inputLetter">Enter your letter:</label>
-            <input type="text" class="form-control" id="inputLetter" />
+            <input type="text" class="form-control" id="inputLetter" maxlength="1" />
+            <span class="error" id="errorMsg"></span>
           </div>
-          <button type="button" class="btn btn-primary" id="guess">Guess!</button>
+          <button type="button" class="btn btn-primary" id="gameReset">Reset the game!</button>
         </div>
         <div class="col-2">
           <div class="form-group">
@@ -55,6 +80,6 @@
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="document.js" charset="utf-8"></script>
+  <script type="text/javascript" src="words.js" charset="utf-8"></script>
   <script type="text/javascript" src="guess.js" charset="utf-8"></script>
 </body>
