@@ -66,9 +66,33 @@ let isPalindrom = function(){
 };
 
 
+let parseString = function(){
+	console.log(this);
+	//return parseString.reverseString('ceva');
+}
+
+parseString.prototype.strReverse = function(){
+	console.log('here is reverse String');
+}
+
+parseString.prototype.isPalindrom = function(){
+	console.log('here is palindrom');
+}
+
+let p = new parseString();
+
 
 // Register click handlers
 document.getElementById('leapYearBtn').onclick = leapYear;
 document.getElementById('fibonacciBtn').onclick = fibonacci;
-document.getElementById('reverseBtn').onclick = reverseString;
-document.getElementById('palindromeBtn').onclick = isPalindrom;
+/*document.getElementById('reverseBtn').onclick = reverseString;
+document.getElementById('palindromeBtn').onclick = isPalindrom;*/
+
+document.getElementById('reverseBtn').onclick = function() {
+	let string = getInputValue(this);
+	console.log(string)
+	//p.strReverse;
+
+};
+
+ //document.getElementById('palindromeBtn').onclick = isPalindrom;
