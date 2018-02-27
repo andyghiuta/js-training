@@ -51,8 +51,6 @@ let reverseString = function(){
 
 let isPalindrom = function(){
 	let compareletters = () => {
-
-		//Create array from the given string
 		let input = getInputValue(this);
 
 		//And reverse it
@@ -66,33 +64,50 @@ let isPalindrom = function(){
 };
 
 
-let parseString = function(){
-	console.log(this);
-	//return parseString.reverseString('ceva');
-}
+let parseString = function(input){
+	this.input = input;
+	this.inputValue = getInputValue(this.input);
+	
+	/*@TODO - why this one being declared inside reversedString() is not visible in palindromWord()*/
+	this.reversedString = this.inputValue.split('').reverse().join('');
+	
+	this.stringReverse = function(){
+		setOutputValue(this.input, this.reversedString);
+	};
+	
+	this.palindromWord = function(){
+		setOutputValue(this.input, this.inputValue === this.reversedString ? "Palindrom" : "Not Palindrom");
+	}
+};
 
+
+/*@TODO - try more to use prototype*/
 parseString.prototype.strReverse = function(){
-	console.log('here is reverse String');
-}
+	this.reversedString = this.inputValue.split('').reverse().join('');
+	setOutputValue(this.input, this.reversedString);
+	return this.reversedString;
+};
 
-parseString.prototype.isPalindrom = function(){
-	console.log('here is palindrom');
-}
-
-let p = new parseString();
-
+parseString.prototype.palindrom = function(){
+	/*@TODO - why this.reversedString from strReverse is undefined here?*/
+	setOutputValue(this.input, this.inputValue === this.reversedString ? "Palindrom" : "Not Palindrom");
+};
 
 // Register click handlers
 document.getElementById('leapYearBtn').onclick = leapYear;
 document.getElementById('fibonacciBtn').onclick = fibonacci;
+
 /*document.getElementById('reverseBtn').onclick = reverseString;
 document.getElementById('palindromeBtn').onclick = isPalindrom;*/
 
-document.getElementById('reverseBtn').onclick = function() {
-	let string = getInputValue(this);
-	console.log(string)
-	//p.strReverse;
-
+document.getElementById('reverseBtn').onclick = function(){
+	let word = new parseString(this);
+	word.stringReverse()
+	//word.strReverse(this);
 };
 
- //document.getElementById('palindromeBtn').onclick = isPalindrom;
+document.getElementById('palindromeBtn').onclick = function(){
+	let word = new parseString(this);
+	word.palindromWord();
+	//word.palindrom(this);
+};
