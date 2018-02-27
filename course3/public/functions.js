@@ -66,7 +66,7 @@ let isPalindrom = function(){
 
 let parseString = function(input){
 	this.input = input;
-	this.inputValue = getInputValue(this.input);
+	this.inputValue = getInputValue(this.input).replace(/\s/g,'');
 	
 	/*@TODO - why this one being declared inside reversedString() is not visible in palindromWord()*/
 	this.reversedString = this.inputValue.split('').reverse().join('');
@@ -77,7 +77,9 @@ let parseString = function(input){
 	
 	this.palindromWord = function(){
 		setOutputValue(this.input, this.inputValue === this.reversedString ? "Palindrom" : "Not Palindrom");
+		console.log(this.inputValue)
 	}
+
 };
 
 
