@@ -64,7 +64,7 @@ let isPalindrom = function(){
 };
 
 
-let parseString = function(input){
+let stringParse = function(input){
 	this.input = input;
 	this.inputValue = getInputValue(this.input).replace(/\s/g,'');
 	
@@ -84,16 +84,16 @@ let parseString = function(input){
 
 
 /*@TODO - try more to use prototype*/
-parseString.prototype.strReverse = function(){
+/*parseString.prototype.strReverse = function(){
 	this.reversedString = this.inputValue.split('').reverse().join('');
 	setOutputValue(this.input, this.reversedString);
 	return this.reversedString;
 };
 
 parseString.prototype.palindrom = function(){
-	/*@TODO - why this.reversedString from strReverse is undefined here?*/
+	*//*@TODO - why this.reversedString from strReverse is undefined here?*//*
 	setOutputValue(this.input, this.inputValue === this.reversedString ? "Palindrom" : "Not Palindrom");
-};
+};*/
 
 // Register click handlers
 document.getElementById('leapYearBtn').onclick = leapYear;
@@ -103,13 +103,13 @@ document.getElementById('fibonacciBtn').onclick = fibonacci;
 document.getElementById('palindromeBtn').onclick = isPalindrom;*/
 
 document.getElementById('reverseBtn').onclick = function(){
-	let word = new parseString(this);
+	let word = new stringParse(this);
 	word.stringReverse()
 	//word.strReverse(this);
 };
 
 document.getElementById('palindromeBtn').onclick = function(){
-	let word = new parseString(this);
+	let word = new stringParse(this);
 	word.palindromWord();
 	//word.palindrom(this);
 };
