@@ -9,19 +9,11 @@ let setOutputValue = function (button, out, selector = '.output') {
 	inputGroup.querySelector(selector).value = out;
 };
 
-// algorithm functions
 let leapYear = function () {
 	let input = getInputValue(this);
-	let output = "";
-
-	if ((input % 100 === 0)) {
-		output = (input % 400 === 0);
-	} else {
-		output = (input % 4 === 0)
-	}
 	
 	// set the output value
-	setOutputValue(this, output === false ? input + ' Not leap Year' : input + ' is/was a Leap Year');
+	setOutputValue(this, (input % 4 === 0) ? input + ' is/was a Leap Year' : input + ' Not leap Year');
 };
 
 let fibonacci = function () {
@@ -43,8 +35,12 @@ let fibonacci = function () {
 	setOutputValue(this, getFibPriorTo(number).join(','));
 };
 
+/*Plain functions - working good but no inheritance or prototyping on them
+but workind as a charm with references
+* Advanced functionality in stringParse
+* */
 let reverseString = function(){
-	let input = getInputValue(this);
+	let input = getInputValue(this).replace(/\s/g,'');
 	let reverseString = input.split('').reverse().join('')
 	setOutputValue(this, reverseString);
 };
@@ -54,6 +50,8 @@ let isPalindrom = function(){
 		let input = getInputValue(this);
 
 		//And reverse it
+		/*@TODO - even so - how this one can be replaced with let reverseString from the reverseString()?
+		* a call to the reverseString() cannot be made because  it calls the setOutputValue and I don't want that*/
 		let reversedInput = input.split('').reverse().join('');
 
 		//And compare them
@@ -63,12 +61,12 @@ let isPalindrom = function(){
 	setOutputValue(this, true === compareletters() ? "Palindrom" : "Not Palindrom");
 };
 
-
+/*@TODO - I found myself in need to use a parameter and instantiate
+* the stringParse on each click of the button - I'm pretty sure there's a better way, not proud of this one*/
 let stringParse = function(input){
 	this.input = input;
 	this.inputValue = getInputValue(this.input).replace(/\s/g,'');
 	
-	/*@TODO - why this one being declared inside reversedString() is not visible in palindromWord()*/
 	this.reversedString = this.inputValue.split('').reverse().join('');
 	
 	this.stringReverse = function(){
@@ -83,7 +81,12 @@ let stringParse = function(input){
 };
 
 
-/*@TODO - try more to use prototype*/
+let parseString = function(){
+	let input = getInputValue(this);
+}
+
+/*@TODO - try more to use prototype. Not sure how to instantiate the reference to them
+* on the button*/
 /*parseString.prototype.strReverse = function(){
 	this.reversedString = this.inputValue.split('').reverse().join('');
 	setOutputValue(this.input, this.reversedString);
@@ -91,9 +94,11 @@ let stringParse = function(input){
 };
 
 parseString.prototype.palindrom = function(){
-	*//*@TODO - why this.reversedString from strReverse is undefined here?*//*
-	setOutputValue(this.input, this.inputValue === this.reversedString ? "Palindrom" : "Not Palindrom");
-};*/
+	/*@TODO - why this.reversedString from strReverse is undefined here?
+	how to call strReverse here
+	 */
+	// setOutputValue(this.input, this.inputValue === this.reversedString ? "Palindrom" : "Not Palindrom");
+//};
 
 // Register click handlers
 document.getElementById('leapYearBtn').onclick = leapYear;
@@ -103,6 +108,7 @@ document.getElementById('fibonacciBtn').onclick = fibonacci;
 document.getElementById('palindromeBtn').onclick = isPalindrom;*/
 
 document.getElementById('reverseBtn').onclick = function(){
+	/*@TODO - how to avoid doubled instance here and in palindrom*/
 	let word = new stringParse(this);
 	word.stringReverse()
 	//word.strReverse(this);
