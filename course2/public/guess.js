@@ -4,14 +4,14 @@ let guessTheWord = function () {
 	const MAX_FAILS = 6;
 	const BONUS_PER_LETTER = 5; // bitcoins
 	const chosenWord = [];
-
-
+	
+	
 	let updateFailTriesCount = function (fails, letters) {
 		$('#staticTries').val(fails);
 		$('#letterAttemps').val(letters);
 	};
-
-
+	
+	
 	let getRandomWords = function () {
 		// randomly pick a word from the word list
 		
@@ -50,9 +50,9 @@ let guessTheWord = function () {
 		//Keep it globally for other functions
 		chosenWord.push(wordToGuess);
 	};
-
+	
 	let gameOver = function(status){
-
+		
 		$("#inputLetter").attr('readOnly', 'readOnly');
 		switch (status){
 			case true:
@@ -62,24 +62,24 @@ let guessTheWord = function () {
 				$('#mainMsg').text('You loose! Try again');
 				break;
 		}
-
+		
 		$('#gameReset').on('click', function(){
 			location.reload();
 		});
 	}
-
+	
 	let guessMe = function(letter){
 		let regex = new RegExp(letter, 'gi'),
 			matches = chosenWord[0].toString().match(regex);
-
+		
 		return matches ? matches.length : 0;
 	}
-
+	
 	let updateGuessingWord = function(letters){
-
+		
 		let wordToBeGuessed = [...chosenWord[0].toString()],
 			finalWord = [];
-
+		
 		wordToBeGuessed.map(function(value){
 			value = value.toLowerCase();
 			if(letters.indexOf(value) !== -1){
@@ -90,17 +90,17 @@ let guessTheWord = function () {
 				finalWord.push('.')
 			}
 		});
-
+		
 		if(finalWord.indexOf('.') == -1){
 			gameOver(true);
 		}
-
+		
 		return finalWord;
 	}
-
+	
 	let markupUpdate = function(content){
 		let html = '';
-
+		
 		content.map(function(value){
 			if(value == '-'){
 				html += `<span class="separator">-</span>`;
@@ -110,15 +110,15 @@ let guessTheWord = function () {
 				html += `<span>.</span>`
 			}
 		});
-
+		
 		$('#wordToGuess').html(html);
 	}
-
+	
 	let isValidLetter = function (letter) {
 		let errCount = 0,
 			errMsg = [],
 			validLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-
+		
 		if (letter == '') {
 			errCount += 1;
 			errMsg.push('You have to provide a letter first');
@@ -128,33 +128,33 @@ let guessTheWord = function () {
 		}
 		return [errMsg, errCount];
 	};
-
+	
 	let guessLetter = function(){
-
+		
 		let guessedLetters = [],
 			failAttemps = [],
 			foundedLetters,
 			bonus = 0;
 		$('#staticTries').val(MAX_FAILS);
-
+		
 		$("#inputLetter").on('keyup', function(){
-
+			
 			let currentLetter = "";
 			$('#errorMsg').text('');
-
+			
 			/*When typing fast - sometimes an empty value kiks in*/
 			if($(this).val() !== ""){
 				currentLetter = $(this).val();
 			}
-
+			
 			if(isValidLetter(currentLetter)[0].length > 0) {
 				$('#errorMsg').text(isValidLetter(currentLetter)[0].toString());
 				$(this).val('')
 				return;
 			}else {
-
+				
 				let match = guessMe(currentLetter);
-
+				
 				if (match > 0) {
 					if (guessedLetters.indexOf(currentLetter) == -1) {
 						guessedLetters.push(currentLetter);
@@ -167,33 +167,33 @@ let guessTheWord = function () {
 				} else {
 					failAttemps.push(currentLetter);
 				}
-
+				
 				if (foundedLetters !== undefined) {
 					markupUpdate(foundedLetters);
 				}
-
+				
 				if (failAttemps.length >= MAX_FAILS) {
 					updateFailTriesCount(MAX_FAILS - failAttemps.length);
-
+					
 					gameOver(false);
 				} else {
 					updateFailTriesCount(MAX_FAILS - failAttemps.length);
 					$('#letterAttemps').val(failAttemps);
 				}
 			}
-
+			
 			$('#staticScore').val(bonus);
 			$(this).val('')
 		})
 	}
-
-
+	
+	
 	// initialize the guessing game
 	let init = function () {
 		placeTheWords();
 		guessLetter();
 	};
-
+	
 	// return an object with the functions we want exposed
 	return {
 		init
