@@ -43,3 +43,13 @@ When the number of tries has been exceeded it will print a fail message.
 ## Requirements
 - Fill in the empty functions with the appropriate code
 - Create additional functions as needed
+
+
+# Course 4 - Inheritance and async
+- Step 0: See Course 1
+- Step 1: `cd course4 && npm i`
+- Step 2: `npm start`
+- Step 3: Open http://localhost:3000
+
+## Requirements
+- Implement additional shapes
