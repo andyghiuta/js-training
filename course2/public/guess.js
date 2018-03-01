@@ -19,7 +19,7 @@ let guessTheWord = function () {
 			randomWordKey = Math.floor(Math.random() * Object.values(Object.values(wordsToGuess)[randomCategoryKey])[0].length), //get a random key between 0 and the length of words array from the category
 			randomCategory = Object.keys(Object.values(wordsToGuess)[randomCategoryKey]).join(''), //get the category name which was choosed randomly
 			randomWord = Object.values(Object.values(wordsToGuess)[randomCategoryKey])[0][randomWordKey].split(' '); //get the word from that cathegory which was choosed randomly
-		chosenWord.push([...randomWord]);
+		chosenWord = [randomWord[0]];
 		return [randomCategory, randomWord];
 	};
 	
@@ -46,9 +46,6 @@ let guessTheWord = function () {
 		});
 		
 		wordTag.innerHTML = wordHtml;
-		
-		//Keep it globally for other functions
-		chosenWord.push(wordToGuess);
 	};
 	
 	let gameOver = function(status){
@@ -70,14 +67,14 @@ let guessTheWord = function () {
 	
 	let guessMe = function(letter){
 		let regex = new RegExp(letter, 'gi'),
-			matches = chosenWord[0].toString().match(regex);
+			matches = chosenWord.toString().match(regex);
 		
 		return matches ? matches.length : 0;
 	}
 	
 	let updateGuessingWord = function(letters){
 		
-		let wordToBeGuessed = [...chosenWord[0].toString()],
+		let wordToBeGuessed = [...chosenWord.toString()],
 			finalWord = [];
 		
 		wordToBeGuessed.map(function(value){
@@ -135,6 +132,7 @@ let guessTheWord = function () {
 			failAttemps = [],
 			foundedLetters,
 			bonus = 0;
+		
 		$('#staticTries').val(MAX_FAILS);
 		
 		$("#inputLetter").on('keyup', function(){
@@ -164,8 +162,13 @@ let guessTheWord = function () {
 					} else {
 						$('#errorMsg').text('You already entered that letter')
 					}
-				} else {
-					failAttemps.push(currentLetter);
+				} else{
+					if (failAttemps.indexOf(currentLetter) != -1){
+						$('#errorMsg').text('You already entered that letter')
+					}else{
+						failAttemps.push(currentLetter);
+						$('#errorMsg').text('');
+					}
 				}
 				
 				if (foundedLetters !== undefined) {
@@ -174,7 +177,6 @@ let guessTheWord = function () {
 				
 				if (failAttemps.length >= MAX_FAILS) {
 					updateFailTriesCount(MAX_FAILS - failAttemps.length);
-					
 					gameOver(false);
 				} else {
 					updateFailTriesCount(MAX_FAILS - failAttemps.length);
