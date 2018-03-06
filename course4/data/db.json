@@ -30,4 +30,19 @@
 	"y": 110,
 	"width": 50,
 	"height": 40
+}, {
+	"type": "Line",
+	"x1": 0,
+	"y1": 110,
+	"x2": 110,
+	"y2": 0,
+	"lineWidth": 5
+},{
+	"type": "Ark",
+	"x": 200,
+	"y": 75,
+	"r": 40,
+	"angleStart": 9,
+	"angleEnd": 2,
+	"clockDirection": false
 }]
