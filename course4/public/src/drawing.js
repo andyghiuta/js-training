@@ -97,8 +97,6 @@ function Line(x1, y1, x2, y2, lineWidth, fill = 'rgba(0, 0, 200, 0.5)') {
 
 Line.prototype = Object.create(Shape.prototype);
 
-
-
 Line.prototype.drawFrame = function () {
 	ctx.beginPath();
 	
@@ -111,25 +109,43 @@ Line.prototype.drawFrame = function () {
 };
 
 /*Ark constructor*/
-function Ark(x, y, r, angleStart, angleEnd, clockDirection,  fill = 'rgba(0, 0, 200, 0.5)'){
+function Ark(x, y, r, angleStart, angleEnd, fill = 'rgba(0, 0, 200, 0.5)'){
 	this.x = x;
 	this.y = y;
 	this.r = r;
 	this.angleStart = angleStart;
 	this.angleEnd = angleEnd;
-	this.clockDirection = clockDirection;
 	this.fill = fill;
+	console.log(this);
 }
 
 Ark.prototype = Object.create(Shape.prototype);
 
 Ark.prototype.drawFrame = function(){
 	ctx.beginPath();
-	ctx.arc(this.x, this.y, this.r, this.angleStart, this.angleEnd * Math.PI, this.clockDirection)
-	ctx.fill();
+	ctx.arc(this.x, this.y, this.r, this.angleStart, this.angleEnd * Math.PI)
+	ctx.stroke();
 }
 
-console.log(Shape.prototype);
+function drawText(x, y, fontSize, textSample, fill = 'rgba(0, 0, 200, 0.5)') {
+	Shape.call(this, x, y, fill);
+	this.fontSize = fontSize;
+	this.font = `${this.fontSize}px Arial`;
+	this.textSample = textSample;
+}
+
+drawText.prototype = Object.create(Shape.prototype);
+
+drawText.prototype.drawFrame = function(){
+	ctx.font = this.font;
+	ctx.fillText(this.textSample, this.x, this.y);
+	ctx.fillStyle = this.fill;
+};
+
+function drawClock(x, y, fill = 'rgba(0, 0, 200, 0.5)') {
+	Shape.call(this, x, y, fill)
+}
+
 // factory
 function createShape(shape) {
 	switch (shape.type) {
@@ -142,7 +158,9 @@ function createShape(shape) {
 		case 'Line':
 			return new Line(shape.x1, shape.y1, shape.x2, shape.y2, shape.lineWidth);
 		case 'Ark':
-			return new Ark(shape.x, shape.y, shape.r, shape.angleStart, shape.angleEnd, shape.clockDirection, shape.fill)
+			return new Ark(shape.x, shape.y, shape.r, shape.angleStart, shape.angleEnd, shape.fill)
+		case 'Text':
+			return new drawText(shape.x, shape.y, shape.fontSize, shape.textSample, shape.fill);
 		default:
 			throw new Error(`Shape type '${shape.type}' constructor not handled in factory`);
 	}
@@ -272,18 +290,34 @@ addShapeBtn.addEventListener('click', function () {
 		case 'Ark':
 			let startAngle = document.getElementById('startAngle').value;
 			let endAngle = document.getElementById('endAngle').value;
-			let dirArk = document.getElementById('dirArk').value;
 			let radius = document.getElementById('radius').value;
+			let color = document.getElementById('colorArk').value;
 			
 			let ark = createShape({
 				type: shapeTypeSelect.value,
 				x,
 				y,
-				startAngle,
-				dirArk,
-				radius
+				angleStart: startAngle,
+				angleEnd: endAngle,
+				r: radius,
+				color
 			});
 			ark.draw()
+			break;
+		case 'Text':
+			let textToWrite = document.getElementById('textToWrite').value;
+			let fill = document.getElementById('textColor').value;
+			let fontSize = document.getElementById('fontSize').value;
+			
+			let drawText = createShape({
+				x,
+				y,
+				fontSize,
+				type: shapeTypeSelect.value,
+				textSample: textToWrite,
+				fill
+			});
+			drawText.draw()
 			break;
 		default:
 	}
@@ -293,10 +327,3 @@ let clearBtn = document.getElementById('clear');
 clearBtn.addEventListener('click', function () {
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 }, false);
-
-
-
-
-
-		
-		

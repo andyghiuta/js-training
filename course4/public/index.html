@@ -9,6 +9,8 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
 	      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	
+	<link rel="stylesheet" href="style.css" type="text/css" media="all" />
+	
 	<title>Course 4 - Inheritance & Ajax</title>
 	<style type="text/css">
 		#drawingCnt {
@@ -50,6 +52,7 @@
 						<option value="Square">Square</option>
 						<option value="Line">Line</option>
 						<option value="Ark">Ark</option>
+						<option value="Text">Text</option>
 					</select>
 				</div>
 			</div>
@@ -60,7 +63,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text">X:</span>
 					</div>
-					<input type="text" class="form-control" id="x"/>
+					<input type="text" class="form-control" id="x" value="250"/>
 				</div>
 			</div>
 		</div>
@@ -70,7 +73,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text">Y:</span>
 					</div>
-					<input type="text" class="form-control" id="y"/>
+					<input type="text" class="form-control" id="y" value="75"/>
 				</div>
 			</div>
 		</div>
@@ -160,7 +163,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text">Start Angle:</span>
 					</div>
-					<input type="text" class="form-control" id="startAngle"/>
+					<input type="text" class="form-control" id="startAngle" value="4"/>
 				</div>
 			</div>
 		</div>
@@ -170,7 +173,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text">End Angle:</span>
 					</div>
-					<input type="text" class="form-control" id="endAngle"/>
+					<input type="text" class="form-control" id="endAngle" value="2"/>
 				</div>
 			</div>
 		</div>
@@ -180,17 +183,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text">Radius:</span>
 					</div>
-					<input type="text" class="form-control" id="radius"/>
-				</div>
-			</div>
-		</div>
-		<div class="col">
-			<div class="form-group">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<span class="input-group-text">Direction</span>
-					</div>
-					<input type="text" class="form-control" id="dirArk"/>
+					<input type="text" class="form-control" id="radius" value="50"/>
 				</div>
 			</div>
 		</div>
@@ -201,6 +194,38 @@
 						<span class="input-group-text">Pick a color:</span>
 					</div>
 					<input type="color" class="form-control" id="colorArk"/>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row attr d-none" id="attrText">
+		<div class="col">
+			<div class="form-group">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Text:</span>
+					</div>
+					<input type="text" class="form-control" id="textToWrite"/>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="form-group">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Font Size:</span>
+					</div>
+					<input type="text" class="form-control" id="fontSize"/>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="form-group">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Color:</span>
+					</div>
+					<input type="color" class="form-control" id="textColor"/>
 				</div>
 			</div>
 		</div>

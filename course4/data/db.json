@@ -32,17 +32,16 @@
 	"height": 40
 }, {
 	"type": "Line",
-	"x1": 0,
+	"x1": 200,
 	"y1": 110,
 	"x2": 110,
 	"y2": 0,
 	"lineWidth": 5
 },{
 	"type": "Ark",
-	"x": 200,
+	"x": 250,
 	"y": 75,
-	"r": 40,
-	"angleStart": 9,
-	"angleEnd": 2,
-	"clockDirection": false
+	"r": 50,
+	"angleStart": 4,
+	"angleEnd": 2
 }]
