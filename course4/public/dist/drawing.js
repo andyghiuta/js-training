@@ -1,8 +1,44 @@
 'use strict';
 
+var retrieveAllTheShapesAsync = function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+    var response;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            _context.next = 3;
+            return axios.get('/data');
+
+          case 3:
+            response = _context.sent;
+            return _context.abrupt('return', response.data);
+
+          case 7:
+            _context.prev = 7;
+            _context.t0 = _context['catch'](0);
+
+            console.error(_context.t0);
+
+          case 10:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this, [[0, 7]]);
+  }));
+
+  return function retrieveAllTheShapesAsync() {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 // TODO 1. Create more shapes. EG: Square, Line, Arc, Text
 // TODO 2. Extend the objects with a method that validates the input parameters and prompts the user
-// TODO 3. Load the objects from the "database"
+// 3. Load the objects from the "database"
 // TODO 4. Save the objects in the "database"
 var canvas = document.getElementById('drawing');
 var canvasDiv = document.getElementById('drawingCnt');
@@ -21,7 +57,7 @@ function Shape(x, y) {
   this.x = x;
   this.y = y;
   this.fill = fill;
-};
+}
 // the function that draws the shape
 Shape.prototype.draw = function () {
   var _this = this;
@@ -44,7 +80,7 @@ function Circle(x, y, r) {
   // call the shape constructor
   Shape.call(this, x, y);
   this.r = r;
-};
+}
 // Circle extends Shape
 Circle.prototype = Object.create(Shape.prototype);
 // extend the drawFrame
@@ -65,7 +101,7 @@ function Rectangle(x, y, width, height) {
   Shape.call(this, x, y, fill);
   this.width = width;
   this.height = height;
-};
+}
 // Circle extends Shape
 Rectangle.prototype = Object.create(Shape.prototype);
 // extend the drawFrame
@@ -84,7 +120,7 @@ function Square(x, y, size) {
 
   // call the shape constructor
   Rectangle.call(this, x, y, size, size, fill);
-};
+}
 // Square extends Rectangle
 Square.prototype = Object.create(Rectangle.prototype);
 
@@ -97,7 +133,7 @@ function Line(x1, y1, x2, y2, lineWidth) {
   this.y2 = y2;
   this.lineWidth = lineWidth;
   this.fill = fill;
-};
+}
 
 Line.prototype = Object.create(Shape.prototype);
 
@@ -139,13 +175,13 @@ function retrieveAllTheShapes(success, error) {
       error('Could not retrieve data');
     }
   });
-};
+}
+
 
 var drawAllTheShapes = function drawAllTheShapes() {
   // show progress bar
   toggleProgress(true);
   var doneCallback = function doneCallback(shapes) {
-    console.log('3');
     shapes.forEach(function (shape) {
       var shapeObject = createShape(shape);
       shapeObject.draw();
@@ -153,11 +189,47 @@ var drawAllTheShapes = function drawAllTheShapes() {
     // hide progress bar
     toggleProgress(false);
   };
-  console.log('1');
-  retrieveAllTheShapes(doneCallback);
+  retrieveAllTheShapes(doneCallback, function (myError) {
+    alert(myError);
+  });
 };
 
-drawAllTheShapes();
+var drawAllTheShapesAsync = function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+    var shapes;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            // show progress bar
+            toggleProgress(true);
+            _context2.next = 3;
+            return retrieveAllTheShapesAsync();
+
+          case 3:
+            shapes = _context2.sent;
+
+            shapes.forEach(function (shape) {
+              var shapeObject = createShape(shape);
+              shapeObject.draw();
+            });
+            // hide progress bar
+            toggleProgress(false);
+
+          case 6:
+          case 'end':
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this);
+  }));
+
+  return function drawAllTheShapesAsync() {
+    return _ref3.apply(this, arguments);
+  };
+}();
+
+drawAllTheShapesAsync();
 
 // add window resize listener
 window.addEventListener('resize', function () {
@@ -216,63 +288,37 @@ addShapeBtn.addEventListener('click', function () {
   // read the shape position
   var x = document.getElementById('x').value;
   var y = document.getElementById('y').value;
+  var shapeOptions = {
+    type: shapeTypeSelect.value,
+    x: x,
+    y: y
+  };
+
   switch (shapeTypeSelect.value) {
     case 'Circle':
       // circle also has a radius
-      var r = document.getElementById('circleR').value;
-      // create and draw the shape
-      var circle = createShape({
-        type: shapeTypeSelect.value,
-        x: x,
-        y: y,
-        r: r
-      });
-      circle.draw();
+      shapeOptions.r = document.getElementById('circleR').value;
       break;
     case 'Rectangle':
       // rectangle has width and height
-      var width = document.getElementById('rectWidth').value;
-      var height = document.getElementById('rectHeight').value;
-      // create and draw the shape
-      var rectangle = createShape({
-        type: shapeTypeSelect.value,
-        x: x,
-        y: y,
-        width: width,
-        height: height
-      });
-      rectangle.draw();
+      shapeOptions.width = document.getElementById('rectWidth').value;
+      shapeOptions.height = document.getElementById('rectHeight').value;
       break;
     case 'Square':
       // rectangle has width and height
-      var size = document.getElementById('sqSize').value;
-      // create and draw the shape
-      var square = createShape({
-        type: shapeTypeSelect.value,
-        x: x,
-        y: y,
-        size: size
-      });
-      square.draw();
+      shapeOptions.size = document.getElementById('sqSize').value;
       break;
     case 'Line':
       // rectangle has width and height
-      var x2 = document.getElementById('lineX2').value;
-      var y2 = document.getElementById('lineY2').value;
-      var lineWidth = document.getElementById('lineWidth').value;
-      // create and draw the shape
-      var line = createShape({
-        type: shapeTypeSelect.value,
-        x1: x,
-        y1: y,
-        x2: x2,
-        y2: y2,
-        lineWidth: lineWidth
-      });
-      line.draw();
+      shapeOptions.x2 = document.getElementById('lineX2').value;
+      shapeOptions.y2 = document.getElementById('lineY2').value;
+      shapeOptions.lineWidth = document.getElementById('lineWidth').value;
       break;
     default:
   }
+  // create and draw the shape
+  var shape = createShape(shapeOptions);
+  shape.draw();
 }, false);
 
 var clearBtn = document.getElementById('clear');
