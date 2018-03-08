@@ -13,6 +13,7 @@ app.get('/data', function (req, res) {
 			res.status(500).send('Couldn\'t read DB!');
 		}
 		res.json(JSON.parse(data));
+		console.log(res)
 	});
 });
 
