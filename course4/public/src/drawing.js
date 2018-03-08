@@ -99,7 +99,6 @@ Line.prototype = Object.create(Shape.prototype);
 
 Line.prototype.drawFrame = function () {
 	ctx.beginPath();
-	
 	ctx.moveTo(this.x1, this.y1);
 	ctx.lineTo(this.x2, this.y2);
 	ctx.strokeStyle = this.fill;
@@ -150,6 +149,7 @@ function drawClock(x, y, fill = 'rgba(0, 0, 200, 0.5)') {
 function createShape(shape) {
 	switch (shape.type) {
 		case 'Circle':
+			//return new DrawingShapes(shape.x, shape.y).CreateShape('Circle', {radius: shape.r})
 			return new Circle(shape.x, shape.y, shape.r);
 		case 'Rectangle':
 			return new Rectangle(shape.x, shape.y, shape.width, shape.height);
@@ -237,6 +237,8 @@ addShapeBtn.addEventListener('click', function () {
 			// circle also has a radius
 			let r = document.getElementById('circleR').value;
 			// create and draw the shape
+			//return new DrawingShapes(x, y).CreateShape('Circle', {radius: r});
+			
 			let circle = createShape({
 				type: shapeTypeSelect.value,
 				x,

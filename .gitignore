@@ -1,3 +1,5 @@
+.idea/*
+course4/public/dist*
 # Logs
 logs
 *.log
