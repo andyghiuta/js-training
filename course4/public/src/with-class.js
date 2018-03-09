@@ -1,9 +1,7 @@
 class DrawingShapes {
 	constructor(x, y, fill = 'rgba(0, 0, 200, 0.5)'){
-		this.x = document.getElementById('x').value;
-		this.y = document.getElementById('y').value;
-		/*this.x = x;
-		this.y = y;*/
+		this.x = x;
+		this.y = y;
 		this.fill = fill;
 		this.canvas = document.getElementById('drawing');
 		this.canvasDiv = document.getElementById('drawingCnt');
@@ -72,93 +70,6 @@ class DrawingShapes {
 	}
 }
 
-let addShapeBtn = document.getElementById('addShape');
-let shapeAttr = document.getElementById(`attr${this.value}`);
-shapeAttr.classList.remove('d-none');
-addShapeBtn.addEventListener('click', function () {
-	
-	switch (shapeTypeSelect.value) {
-		case 'Circle':
-			let radius = document.getElementById('circleR').value;
-			new DrawingShapes().Circle(radius);
-			break;
-		case 'Rectangle':
-			// rectangle has width and height
-			let width = document.getElementById('rectWidth').value;
-			let height = document.getElementById('rectHeight').value;
-			// create and draw the shape
-			let rectangle = createShape({
-				type: shapeTypeSelect.value,
-				x,
-				y,
-				width,
-				height
-			});
-			rectangle.draw();
-			break;
-		case 'Square':
-			// rectangle has width and height
-			let size = document.getElementById('sqSize').value;
-			// create and draw the shape
-			let square = createShape({
-				type: shapeTypeSelect.value,
-				x,
-				y,
-				size
-			});
-			square.draw();
-			break;
-		case 'Line':
-			// rectangle has width and height
-			let x2 = document.getElementById('lineX2').value;
-			let y2 = document.getElementById('lineY2').value;
-			let lineWidth = document.getElementById('lineWidth').value;
-			// create and draw the shape
-			let line = createShape({
-				type: shapeTypeSelect.value,
-				x1: x,
-				y1: y,
-				x2,
-				y2,
-				lineWidth
-			});
-			line.draw();
-			break;
-		case 'Ark':
-			let startAngle = document.getElementById('startAngle').value;
-			let endAngle = document.getElementById('endAngle').value;
-			let radius = document.getElementById('radius').value;
-			let color = document.getElementById('colorArk').value;
-			
-			let ark = createShape({
-				type: shapeTypeSelect.value,
-				x,
-				y,
-				angleStart: startAngle,
-				angleEnd: endAngle,
-				r: radius,
-				color
-			});
-			ark.draw()
-			break;
-		case 'Text':
-			let textToWrite = document.getElementById('textToWrite').value;
-			let fill = document.getElementById('textColor').value;
-			let fontSize = document.getElementById('fontSize').value;
-			
-			let drawText = createShape({
-				x,
-				y,
-				fontSize,
-				type: shapeTypeSelect.value,
-				textSample: textToWrite,
-				fill
-			});
-			drawText.draw()
-			break;
-		default:
-	}
-}, false);
 
 /**@TODO - investigate export/import */
 
