@@ -3,7 +3,7 @@ let guessTheWord = function () {
 	// "config" options
 	const MAX_FAILS = 6;
 	const BONUS_PER_LETTER = 5; // bitcoins
-	let chosenWord = [];
+	const chosenWord = [];
 	
 	
 	let updateFailTriesCount = function (fails, letters) {
