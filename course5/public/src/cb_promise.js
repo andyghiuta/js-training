@@ -68,19 +68,19 @@ function queueExample() {
   // "Zero delays"
   (function() {
 
-    log('this is the start');
+    log('1. this is the start');
 
     setTimeout(function cb() {
-      log('this is a msg from call back');
+      log('2. this is a msg from call back');
     });
 
-    log('this is just a message');
+    log('3. this is just a message');
 
     setTimeout(function cb1() {
-      log('this is a msg from call back1');
+      log('4. this is a msg from call back1');
     }, 0);
 
-    log('this is the end');
+    log('5. this is the end');
 
   })();
 }
@@ -88,6 +88,7 @@ function queueExample() {
 function callbackExample() {
   // start Callback logic
   let simulateTimeout;
+
   function retrieveResult(callback) {
     log('retrieveResult');
     clearTimeout(simulateTimeout);
@@ -102,7 +103,7 @@ function callbackExample() {
   let showResult = function(callMeWhenDone) {
     toggleProgress(true);
     let doneCallback = function(result) {
-      log('We got a result = ', result);
+      log('We got a result = ' + result);
       toggleProgress(false);
       callMeWhenDone();
     };
@@ -130,8 +131,9 @@ function promiseExample() {
     // simulate an http call
     simulateTimeoutPromise = setTimeout(function() {
       log('build the result');
-      let myResult = 'Success!';
+      let myResult = true;
       resolve(myResult);
+      // reject('Some message');
     }, 5 * 1000);
   };
   // Promise is an object which receives a callback with 2 callbacks
@@ -146,13 +148,13 @@ function promiseExample() {
       // simulate an http call
       simulateTimeoutPromiseParse = setTimeout(function() {
         log('parse the result');
-        resolve(result ? true : false);
+        resolve(result ? 'Success!' : 'Fail..');
       }, 5 * 1000);
     };
     return new Promise(promiseCallbackParse);
   }
 
-  let showResultWithPromise = function(callMeWhenDone) {
+  let showResultWithPromise = async function(callMeWhenDone) {
     toggleProgress(true);
     let doneCallback = function(result) {
       log('We got a result = ' + result);
@@ -160,10 +162,13 @@ function promiseExample() {
       callMeWhenDone();
     };
     log('before retrieveResult');
-    retrieveResultPromise
-      .then(parseResult)
-      .then(doneCallback)
-      .catch();
+    // retrieveResultPromise
+    //   .then(parseResult)
+    //   .then(doneCallback)
+    //   .catch(function(error) {
+
+    //   });
+    let result1 = await parseResult(await retrieveResultPromise);
     log('after retrieveResult');
   }
 
@@ -172,11 +177,11 @@ function promiseExample() {
   }
   log('before showResult');
   // 'callMeWhenDone' is a callback
-  showResultWithPromise(callMeWhenDoneP);
+  showResultWithPromise().then(callMeWhenDoneP);
   log('after showResult');
 }
 
-memoryExample();
+// memoryExample();
 // queueExample();
 // callbackExample();
-// promiseExample();
+promiseExample();
