@@ -9,107 +9,174 @@ function toggleProgress(show) {
 
 // MemoryManagement: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_Management
 
-// Event Queue
-const s = new Date().getSeconds();
 
-setTimeout(function() {
-  // prints out "2", meaning that the callback is not called immediately after 500 milliseconds.
-  log('Ran after ' + (new Date().getSeconds() - s) + ' seconds');
-}, 500);
+function memoryExample() {
+  var createdElements = {};
+  var events = [];
+  function destroyMyMemory() {
+    var i, el;
 
-while(true) {
-  if (new Date().getSeconds() - s >= 2) {
-    log('Good, looped for 2 seconds');
-    break;
+
+    function attachAlert(element) {
+      element.onclick = function() {
+        alert(element.innerHTML);
+      };
+    }
+
+    function reallyBadAttachAlert(element) {
+      return function() {
+        alert(element.innerHTML);
+      };
+    }
+
+    for (i = 0; i < 100; i++) {
+      el = document.createElement('div');
+      el.innerHTML = i;
+
+      /** posibility one: you're storing the element somewhere **/
+      attachAlert(el);
+      createdElements['div' + i] = el;
+
+      /** posibility two: you're storing the callbacks somewhere **/
+      event = reallyBadAttachAlert(el);
+      events.push(event);
+      el.onclick = event;
+    }
+    log('Memory destroyed');
   }
+  // destroyMyMemory();
+  setInterval(destroyMyMemory, 5 * 1000);
 }
 
-// "Zero delays"
-(function() {
+function queueExample() {
+  // Event Queue
+  const s = new Date().getSeconds();
+  log('START');
 
-  log('this is the start');
+  setTimeout(function() {
+    // prints out "2", meaning that the callback is not called immediately after 500 milliseconds.
+    log('Ran after ' + (new Date().getSeconds() - s) + ' seconds');
+  }, 500);
 
-  setTimeout(function cb() {
-    log('this is a msg from call back');
-  });
+  while(true) {
+    if (new Date().getSeconds() - s >= 2) {
+      log('Good, looped for 2 seconds');
+      break;
+    }
+  }
 
-  log('this is just a message');
+  // "Zero delays"
+  (function() {
 
-  setTimeout(function cb1() {
-    log('this is a msg from call back1');
-  }, 0);
+    log('this is the start');
 
-  log('this is the end');
+    setTimeout(function cb() {
+      log('this is a msg from call back');
+    });
 
-})();
+    log('this is just a message');
 
+    setTimeout(function cb1() {
+      log('this is a msg from call back1');
+    }, 0);
 
-// start Callback logic
-let simulateTimeout;
-function retrieveResult(callback) {
-  log('retrieveResult');
-  clearTimeout(simulateTimeout);
-  // simulate an http call
-  simulateTimeout = setTimeout(function() {
-    log('build the result');
-    let myResult = 'Success!';
-    callback(myResult);
-  }, 5 * 1000);
-};
+    log('this is the end');
 
-let showResult = function(callMeWhenDone) {
-  toggleProgress(true);
-  let doneCallback = function(result) {
-    log('We got a result = ', result);
-    toggleProgress(false);
-    callMeWhenDone();
+  })();
+}
+
+function callbackExample() {
+  // start Callback logic
+  let simulateTimeout;
+  function retrieveResult(callback) {
+    log('retrieveResult');
+    clearTimeout(simulateTimeout);
+    // simulate an http call
+    simulateTimeout = setTimeout(function() {
+      log('build the result');
+      let myResult = 'Success!';
+      callback(myResult);
+    }, 5 * 1000);
   };
-  log('before retrieveResult');
-  retrieveResult(doneCallback);
-  log('after retrieveResult');
+
+  let showResult = function(callMeWhenDone) {
+    toggleProgress(true);
+    let doneCallback = function(result) {
+      log('We got a result = ', result);
+      toggleProgress(false);
+      callMeWhenDone();
+    };
+    log('before retrieveResult');
+    retrieveResult(doneCallback);
+    log('after retrieveResult');
+  }
+
+  let callMeWhenDone = function() {
+    log('THE END');
+  }
+
+  log('before showResult');
+  // 'callMeWhenDone' is a callback
+  showResult(callMeWhenDone);
+  log('after showResult');
 }
 
-let callMeWhenDone = function() {
-  log('THE END');
-}
-
-log('START');
-
-log('before showResult');
-// 'callMeWhenDone' is a callback
-showResult(callMeWhenDone);
-log('after showResult');
-
-// start Promise logic
-let simulateTimeoutPromise;
-let retrieveResultPromise = new Promise(function(resolve, reject) {
-  log('retrieveResult');
-  clearTimeout(simulateTimeoutPromise);
-  // simulate an http call
-  simulateTimeoutPromise = setTimeout(function() {
-    log('build the result');
-    let myResult = 'Success!';
-    resolve(myResult);
-  }, 5 * 1000);
-});
-
-let showResultWithPromise = function(callMeWhenDone) {
-  toggleProgress(true);
-  let doneCallback = function(result) {
-    log('We got a result = ', result);
-    toggleProgress(false);
-    callMeWhenDone();
+function promiseExample() {
+  // start Promise logic
+  let simulateTimeoutPromise;
+  let promiseCallback = function(resolve, reject) {
+    log('retrieveResult');
+    clearTimeout(simulateTimeoutPromise);
+    // simulate an http call
+    simulateTimeoutPromise = setTimeout(function() {
+      log('build the result');
+      let myResult = 'Success!';
+      resolve(myResult);
+    }, 5 * 1000);
   };
-  log('before retrieveResult');
-  retrieveResultPromise
-    .then(doneCallback)
-    .catch();
-  log('after retrieveResult');
+  // Promise is an object which receives a callback with 2 callbacks
+  let retrieveResultPromise = new Promise(promiseCallback);
+
+
+  let parseResult = function(result) {
+    let simulateTimeoutPromiseParse;
+    let promiseCallbackParse = function(resolve, reject) {
+      log('parseResult');
+      clearTimeout(simulateTimeoutPromiseParse);
+      // simulate an http call
+      simulateTimeoutPromiseParse = setTimeout(function() {
+        log('parse the result');
+        resolve(result ? true : false);
+      }, 5 * 1000);
+    };
+    return new Promise(promiseCallbackParse);
+  }
+
+  let showResultWithPromise = function(callMeWhenDone) {
+    toggleProgress(true);
+    let doneCallback = function(result) {
+      log('We got a result = ' + result);
+      toggleProgress(false);
+      callMeWhenDone();
+    };
+    log('before retrieveResult');
+    retrieveResultPromise
+      .then(parseResult)
+      .then(doneCallback)
+      .catch();
+    log('after retrieveResult');
+  }
+
+  let callMeWhenDoneP = function() {
+    log('THE END');
+  }
+  log('before showResult');
+  // 'callMeWhenDone' is a callback
+  showResultWithPromise(callMeWhenDoneP);
+  log('after showResult');
 }
 
-log('START');
-
-log('before showResult');
-// 'callMeWhenDone' is a callback
-showResultWithPromise(callMeWhenDone);
-log('after showResult');
+memoryExample();
+// queueExample();
+// callbackExample();
+// promiseExample();
