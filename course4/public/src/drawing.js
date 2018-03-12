@@ -15,155 +15,28 @@ resize();
 
 var ctx = canvas.getContext('2d');
 
-
-// Shape "constructor"
-function Shape(x, y, fill = 'rgba(0, 0, 200, 0.5)') {
-	this.x = x;
-	this.y = y;
-	this.fill = fill;
-};
-
-// the function that draws the shape
-Shape.prototype.draw = function () {
-	window.requestAnimationFrame(() => this.drawFrame());
-};
-
-// extend the drawFrame
-//@TODO - why do we need basically an empty function that is going to be extended afterwards?
-Shape.prototype.drawFrame = function () {
-	// actual drawing logic
-	// to be implemented in each shape type
-	throw new Error('Implement this function in your shape type');
-};
-
-// Circle "constructor"
-function Circle(x, y, r, fill = 'rgba(0, 0, 200, 0.5)') {
-	// call the shape constructor
-	Shape.call(this, x, y);
-	this.r = r;
-};
-
-// Circle extends Shape
-//@TODO - why Circle extends Shape and then extends drawFrame?
-Circle.prototype = Object.create(Shape.prototype);
-
-// extend the drawFrame
-Circle.prototype.drawFrame = function () {
-	// fill with a blue color, 50% opacity
-	ctx.fillStyle = this.fill;
-	ctx.beginPath();
-	// an arc starting at x/y position, "r"px radius, start at 0, end at PI*2 (end of the circle)
-	ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2); // Outer circle
-	ctx.fill();
-};
-
-// Rectangle "constructor"
-function Rectangle(x, y, width, height, fill = 'rgba(0, 0, 200, 0.5)') {
-	// call the shape constructor
-	Shape.call(this, x, y, fill);
-	this.width = width;
-	this.height = height;
-};
-
-// Circle extends Shape @TODO - Circle or rectangle extends Shape?
-Rectangle.prototype = Object.create(Shape.prototype);
-
-// extend the drawFrame @TODO - again, why do we need drawFrame in each form that we are going to draw?
-Rectangle.prototype.drawFrame = function () {
-	// fill with a blue color, 50% opacity
-	ctx.fillStyle = this.fill;
-	ctx.beginPath();
-	// a rectangle starting at x/y position, with width/height
-	ctx.rect(this.x, this.y, this.width, this.height); // Outer circle
-	ctx.fill();
-};
-
-// Square "constructor"
-function Square(x, y, size, fill = 'rgba(0, 0, 200, 0.5)') {
-	// call the shape constructor
-	Rectangle.call(this, x, y, size, size, fill);
-};
-
-// Square extends Rectangle
-//Square.prototype = Object.create(Rectangle.prototype);
-function Line(x1, y1, x2, y2, lineWidth, fill = 'rgba(0, 0, 200, 0.5)') {
-	this.x1 = x1;
-	this.y1 = y1;
-	this.x2 = x2;
-	this.y2 = y2;
-	this.lineWidth = lineWidth;
-	this.fill = fill;
-};
-
-Line.prototype = Object.create(Shape.prototype);
-
-Line.prototype.drawFrame = function () {
-	ctx.beginPath();
-	ctx.moveTo(this.x1, this.y1);
-	ctx.lineTo(this.x2, this.y2);
-	ctx.strokeStyle = this.fill;
-	ctx.lineWidth = this.lineWidth;
-	
-	ctx.stroke();
-};
-
-/*Ark constructor*/
-function Ark(x, y, r, angleStart, angleEnd, fill = 'rgba(0, 0, 200, 0.5)'){
-	this.x = x;
-	this.y = y;
-	this.r = r;
-	this.angleStart = angleStart;
-	this.angleEnd = angleEnd;
-	this.fill = fill;
-	console.log(this);
-}
-
-Ark.prototype = Object.create(Shape.prototype);
-
-Ark.prototype.drawFrame = function(){
-	ctx.beginPath();
-	ctx.arc(this.x, this.y, this.r, this.angleStart, this.angleEnd * Math.PI)
-	ctx.stroke();
-}
-
-function drawText(x, y, fontSize, textSample, fill = 'rgba(0, 0, 200, 0.5)') {
-	Shape.call(this, x, y, fill);
-	this.fontSize = fontSize;
-	this.font = `${this.fontSize}px Arial`;
-	this.textSample = textSample;
-}
-
-drawText.prototype = Object.create(Shape.prototype);
-
-drawText.prototype.drawFrame = function(){
-	ctx.font = this.font;
-	ctx.fillText(this.textSample, this.x, this.y);
-	ctx.fillStyle = this.fill;
-};
-
-function drawClock(x, y, fill = 'rgba(0, 0, 200, 0.5)') {
-	Shape.call(this, x, y, fill)
-}
-
 // factory
 function createShape(shape) {
+	let myDrawings = new DrawingShapes(shape.x, shape.y);
 	switch (shape.type) {
 		case 'Circle':
-			//return new DrawingShapes(shape.x, shape.y).CreateShape('Circle', {radius: shape.r})
-			return new Circle(shape.x, shape.y, shape.r);
+			return myDrawings.Circle(shape.r);
 		case 'Rectangle':
-			return new Rectangle(shape.x, shape.y, shape.width, shape.height);
+			return myDrawings.SquareRectangle(shape.width, shape.height);
 		case 'Square':
-			return new Square(shape.x, shape.y, shape.size);
+			return myDrawings.SquareRectangle(shape.width);
 		case 'Line':
-			return new Line(shape.x1, shape.y1, shape.x2, shape.y2, shape.lineWidth);
+			return myDrawings.Line(shape.x2, shape.y2, shape.lineWidth);
 		case 'Ark':
-			return new Ark(shape.x, shape.y, shape.r, shape.angleStart, shape.angleEnd, shape.fill)
+			return myDrawings.Ark(shape.r, shape.angleStart, shape.angleEnd, shape.fill);
 		case 'Text':
-			return new drawText(shape.x, shape.y, shape.fontSize, shape.textSample, shape.fill);
+			return myDrawings.Text(shape.textSample, shape.fontSize, shape.font, shape.fill);
 		default:
 			throw new Error(`Shape type '${shape.type}' constructor not handled in factory`);
 	}
+	;
+	
+	
 };
 
 function retrieveAllTheShapes(success, error) {
@@ -183,8 +56,7 @@ let drawAllTheShapes = function () {
 	toggleProgress(true);
 	let doneCallback = function (shapes) {
 		shapes.forEach(shape => {
-			let shapeObject = createShape(shape);
-			shapeObject.draw();
+			createShape(shape);
 		});
 		// hide progress bar
 		toggleProgress(false);
@@ -211,6 +83,7 @@ let addShapeBtn = document.getElementById('addShape');
 
 // add event listener on the select type
 let shapeTypeSelect = document.getElementById('type');
+
 shapeTypeSelect.addEventListener('change', function () {
 	// hide all "attr" rows
 	let allAttrs = document.querySelectorAll('.attr');
@@ -236,49 +109,43 @@ addShapeBtn.addEventListener('click', function () {
 	
 	switch (shapeTypeSelect.value) {
 		case 'Circle':
-			// circle also has a radius
 			let r = document.getElementById('circleR').value;
-			// create and draw the shape
-			//return new DrawingShapes(x, y).CreateShape('Circle', {radius: r});
-		    createShape.Circle(r);
-		    
+			createShape.Circle(r);
 			break;
 		case 'Rectangle':
-			// rectangle has width and height
 			let width = document.getElementById('rectWidth').value;
 			let height = document.getElementById('rectHeight').value;
 			createShape.SquareRectangle(width, height);
 			break;
 		case 'Square':
-			// rectangle has width and height
 			let size = document.getElementById('sqSize').value;
-				createShape.SquareRectangle(size);
+			createShape.SquareRectangle(size);
 			break;
 		case 'Line':
-			// rectangle has width and height
 			let x2 = document.getElementById('lineX2').value;
 			let y2 = document.getElementById('lineY2').value;
 			let lineWidth = document.getElementById('lineWidth').value;
 			createShape.Line(x2, y2, lineWidth);
-			
 			break;
 		case 'Ark':
 			let startAngle = document.getElementById('startAngle').value;
 			let endAngle = document.getElementById('endAngle').value;
 			let radius = document.getElementById('radius').value;
 			let color = document.getElementById('colorArk').value;
-			createShape.Ark(radius, startAngle, endAngle)
+			
+			createShape.Ark(radius, startAngle, endAngle, color);
 			
 			break;
 		case 'Text':
 			let textToWrite = document.getElementById('textToWrite').value;
 			let fill = document.getElementById('textColor').value;
 			let fontSize = document.getElementById('fontSize').value;
-			createShape.Text(textToWrite, fontSize)
-			drawText.draw()
+			createShape.Text(textToWrite, fontSize, fill);
+			
 			break;
 		default:
 	}
+	createShape.Save()
 }, false);
 
 let clearBtn = document.getElementById('clear');

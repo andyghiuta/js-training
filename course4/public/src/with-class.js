@@ -42,31 +42,19 @@ class DrawingShapes {
 		this.ctx.stroke();
 	}
 	
-	Text(textSample = 'Hello World', fontSize = 30, font = 'Arial'){
+	Text(textSample = 'Hello World', fontSize = 30, font = 'Arial', fill = this.fill){
+		console.log(fill);
 		this.ctx.font = `${fontSize}px ${font}`;
-		this.ctx.fillStyle = this.fill;
-		this.ctx.textAlign = "center";
+		this.ctx.fillStyle = fill;
 		this.ctx.fillText(textSample, this.x, this.y);
 	}
 	
-	CreateShape(shape, params){
-		switch (shape) {
-			case 'Circle':
-				//console.log(this.Circle(this.radius))
-				return this.Circle(params.radius);
-			case 'Square':
-				return this.SquareRectangle(params.width);
-			case 'Rectangle':
-				return this.SquareRectangle(params.width, params.height);
-			case 'Line':
-				return this.Line(params.x2, params.y2, this.lineWidth);
-			case 'Ark':
-				return this.Ark(params.radius, params.angleStart, params.angleEnd, params.fill)
-			case 'Text':
-				return this.Text(params.textSample, params.fontSize, params.font);
-			default:
-				throw new Error(`Shape type '${this.type}' constructor not handled in factory`);
-		}
+	Save() {
+		let data = JSON.parse(JSON.stringify(this));
+		// Note: constructor.name is available only in ES2015
+		console.log(data);
+		data.type = this.constructor.name;
+		axios.post('/data', data);
 	}
 }
 
