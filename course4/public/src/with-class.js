@@ -49,15 +49,30 @@ class DrawingShapes {
 		this.ctx.fillText(textSample, this.x, this.y);
 	}
 	
-	Save() {
-		let data = JSON.parse(JSON.stringify(this));
+	async Save(shapeOptions) {
+		let newData = [shapeOptions],//JSON.parse(JSON.stringify(shapeOptions)),
+			existingData = await this.GetAllTheShapes(),
+			combinedData = Object.assign(existingData, newData);
+		
 		// Note: constructor.name is available only in ES2015
-		console.log(data);
-		data.type = this.constructor.name;
-		axios.post('/data', data);
+		
+		console.log(combinedData);
+		/*data.type = this.constructor.name;
+		axios.post('/data', data);*/
+	}
+	
+	async GetAllTheShapes(){
+		try {
+			const response = await axios.get('/data');
+			
+			return response.data;
+		}catch (error){
+			console.log(error);
+		}
 	}
 }
 
+new DrawingShapes(120, 140).GetAllTheShapes();
 
 /**@TODO - investigate export/import */
 

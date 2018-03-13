@@ -51,6 +51,9 @@ function retrieveAllTheShapes(success, error) {
 		});
 };
 
+
+
+
 let drawAllTheShapes = function () {
 	// show progress bar
 	toggleProgress(true);
@@ -61,6 +64,7 @@ let drawAllTheShapes = function () {
 		// hide progress bar
 		toggleProgress(false);
 	};
+	
 	retrieveAllTheShapes(doneCallback, (myError) => {
 		alert(myError);
 	});
@@ -103,49 +107,69 @@ shapeTypeSelect.addEventListener('change', function () {
 // add event listener on the button
 addShapeBtn.addEventListener('click', function () {
 	// read the shape position
-	let x = document.getElementById('x').value;
-	let y = document.getElementById('y').value;
-	let createShape = new DrawingShapes(x, y);
 	
-	switch (shapeTypeSelect.value) {
+	let shapeOptions = {
+		type: shapeTypeSelect.value,
+		x: Math.floor(document.getElementById('x').value),
+		y: Math.floor(document.getElementById('y').value),
+	};
+	
+	let createShape = new DrawingShapes(shapeOptions.x, shapeOptions.y);
+	
+	 switch (shapeTypeSelect.value) {
 		case 'Circle':
-			let r = document.getElementById('circleR').value;
-			createShape.Circle(r);
+			Object.assign(shapeOptions, {
+				r: Math.floor(document.getElementById('circleR').value)
+			});
+			createShape.Circle(shapeOptions.r);
 			break;
+			
 		case 'Rectangle':
-			let width = document.getElementById('rectWidth').value;
-			let height = document.getElementById('rectHeight').value;
-			createShape.SquareRectangle(width, height);
+			Object.assign(shapeOptions, {
+				width: Math.floor(document.getElementById('rectWidth').value),
+				height: Math.floor(document.getElementById('rectHeight').value)
+			});
+			createShape.SquareRectangle(shapeOptions.width, shapeOptions.height);
 			break;
+			
 		case 'Square':
-			let size = document.getElementById('sqSize').value;
-			createShape.SquareRectangle(size);
+			Object.assign(shapeOptions, {
+				size: Math.floor(document.getElementById('sqSize').value)
+			});
+			createShape.SquareRectangle(shapeOptions.size);
 			break;
+			
 		case 'Line':
-			let x2 = document.getElementById('lineX2').value;
-			let y2 = document.getElementById('lineY2').value;
-			let lineWidth = document.getElementById('lineWidth').value;
-			createShape.Line(x2, y2, lineWidth);
+			Object.assign(shapeOptions, {
+				x2: Math.floor(document.getElementById('lineX2').value),
+				y2: Math.floor(document.getElementById('lineY2').value),
+				lineWidth: Math.floor(document.getElementById('lineWidth').value)
+			})
+			createShape.Line(shapeOptions.x2,shapeOptions.y2, shapeOptions.lineWidth);
 			break;
+			
 		case 'Ark':
-			let startAngle = document.getElementById('startAngle').value;
-			let endAngle = document.getElementById('endAngle').value;
-			let radius = document.getElementById('radius').value;
-			let color = document.getElementById('colorArk').value;
-			
-			createShape.Ark(radius, startAngle, endAngle, color);
-			
+			Object.assign(shapeOptions, {
+				startAngle: Math.floor(document.getElementById('startAngle').value),
+				endAngle: Math.floor(document.getElementById('endAngle').value),
+				radius: Math.floor(document.getElementById('radius').value),
+				color: Math.floor(document.getElementById('colorArk').value)
+			});
+			createShape.Ark(shapeOptions.radius, shapeOptions.startAngle,shapeOptions.endAngle, shapeOptions.color);
 			break;
+			
 		case 'Text':
-			let textToWrite = document.getElementById('textToWrite').value;
-			let fill = document.getElementById('textColor').value;
-			let fontSize = document.getElementById('fontSize').value;
-			createShape.Text(textToWrite, fontSize, fill);
-			
+			Object.assign(shapeOptions, {
+				textToWrite: document.getElementById('textToWrite').value,
+				fill: Math.floor(document.getElementById('textColor').value),
+				fontSize: Math.floor(document.getElementById('fontSize').value)
+			});
+			createShape.Text(shapeOptions.textToWrite,shapeOptions.fontSize, shapeOptions.fill);
 			break;
+			
 		default:
 	}
-	createShape.Save()
+	createShape.Save(shapeOptions)
 }, false);
 
 let clearBtn = document.getElementById('clear');

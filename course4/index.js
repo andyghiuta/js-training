@@ -16,18 +16,9 @@ app.get('/data', function (req, res) {
 	});
 });
 
-let readData = function(req, response){
-	return (err, data) => {
-		let json = JSON.parse(data);
-		if(err){
-			throw res.status(500).send('Could not write db');
-		}else{
-			json.push(response.body())
-		}
-	}
-}
-
-let writeShapes = function(data){
+/*let writeShapes = function(data){
+	console.log('/data');
+	return;
 	fs.writeFile("./data/db.json", JSON.stringify(data), (err) => {
 		if (err) {
 			console.error(err);
@@ -36,7 +27,7 @@ let writeShapes = function(data){
 		console.log("File has been created");
 	});
 }
+console.log('/data')
+writeShapes({"ceva":"ceva"});*/
 
-//writeShapes({'ceva':'ceva'})
-readData(dbPath)
 app.listen(3000, () => console.log('Example app listening on port 3000!'));
