@@ -35,8 +35,6 @@ function createShape(shape) {
 			throw new Error(`Shape type '${shape.type}' constructor not handled in factory`);
 	}
 	;
-	
-	
 };
 
 function retrieveAllTheShapes(success, error) {
@@ -50,9 +48,6 @@ function retrieveAllTheShapes(success, error) {
 			}
 		});
 };
-
-
-
 
 let drawAllTheShapes = function () {
 	// show progress bar
@@ -169,7 +164,9 @@ addShapeBtn.addEventListener('click', function () {
 			
 		default:
 	}
+	axios.post('/data', {ceva: "altceva"});
 	createShape.Save(shapeOptions)
+	
 }, false);
 
 let clearBtn = document.getElementById('clear');

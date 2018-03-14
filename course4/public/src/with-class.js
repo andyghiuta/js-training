@@ -6,6 +6,7 @@ class DrawingShapes {
 		this.canvas = document.getElementById('drawing');
 		this.canvasDiv = document.getElementById('drawingCnt');
 		this.ctx = this.canvas.getContext('2d');
+		this.updatedData = {};
 	}
 	
 	Circle(radius){
@@ -50,15 +51,12 @@ class DrawingShapes {
 	}
 	
 	async Save(shapeOptions) {
-		let newData = [shapeOptions],//JSON.parse(JSON.stringify(shapeOptions)),
-			existingData = await this.GetAllTheShapes(),
-			combinedData = Object.assign(existingData, newData);
+		let newData = [shapeOptions],
+			existingData = await this.GetAllTheShapes();
+		Object.assign(existingData, newData);
+		Object.assign(this.updatedData, existingData);
 		
-		// Note: constructor.name is available only in ES2015
-		
-		console.log(combinedData);
-		/*data.type = this.constructor.name;
-		axios.post('/data', data);*/
+		return this.updatedData;
 	}
 	
 	async GetAllTheShapes(){
