@@ -164,8 +164,10 @@ addShapeBtn.addEventListener('click', function () {
 			
 		default:
 	}
-	axios.post('/data', {ceva: "altceva"});
-	createShape.Save(shapeOptions)
+	//console.log(JSON.parse(JSON.stringify(shapeOptions)));
+	
+	axios.post('/data', {"ceva": "altceva"}).then((data, arguments) => {console.log(data, arguments)}).catch(error => {console.log(error)});
+	//createShape.Save(shapeOptions)
 	
 }, false);
 

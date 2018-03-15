@@ -44,7 +44,6 @@ class DrawingShapes {
 	}
 	
 	Text(textSample = 'Hello World', fontSize = 30, font = 'Arial', fill = this.fill){
-		console.log(fill);
 		this.ctx.font = `${fontSize}px ${font}`;
 		this.ctx.fillStyle = fill;
 		this.ctx.fillText(textSample, this.x, this.y);
@@ -56,13 +55,15 @@ class DrawingShapes {
 		Object.assign(existingData, newData);
 		Object.assign(this.updatedData, existingData);
 		
+		axios.post('/data', this.updatedData);
+		
 		return this.updatedData;
 	}
 	
 	async GetAllTheShapes(){
 		try {
 			const response = await axios.get('/data');
-			
+			console.log(response);
 			return response.data;
 		}catch (error){
 			console.log(error);

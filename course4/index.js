@@ -18,7 +18,6 @@ app.get('/data', function (req, res) {
 });
 
 let doneWrite = function(req, res) {
-	console.log(res.json())
 	return function (err) {
 		if (err) {
 			res.status(500).send('Couldn\'t write DB!');
@@ -35,6 +34,7 @@ let doneRead = function(req, res) {
 			res.status(500).send('Couldn\'t read DB!');
 		}
 		let json = JSON.parse(data);
+	
 		// add the shape
 		json.push(req.body);
 		fs.writeFile(dbPathSave, JSON.stringify(json, null, 2), 'utf8', doneWrite(req, res));
@@ -47,10 +47,10 @@ app.post('/data', function(req, res) {
 	fs.readFile(dbPath, 'utf8', doneRead(req, res));
 });
 
+
+
 /*let writeShapes = function(data){
-	console.log('/data');
-	return;
-	fs.writeFile("./data/db.json", JSON.stringify(data), (err) => {
+	fs.writeFile(dbPathSave, JSON.stringify(data, null, 4), (err) => {
 		if (err) {
 			console.error(err);
 			return;
@@ -58,7 +58,8 @@ app.post('/data', function(req, res) {
 		console.log("File has been created");
 	});
 }
-console.log('/data')
+
+
 writeShapes({"ceva":"ceva"});*/
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'));
