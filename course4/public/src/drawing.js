@@ -5,7 +5,6 @@
 let canvas = document.getElementById('drawing');
 let canvasDiv = document.getElementById('drawingCnt');
 
-
 function resize() {
 	canvas.width = canvasDiv.offsetWidth * (2 / 3);
 	canvas.height = canvas.width * (2 / 3);
@@ -33,20 +32,19 @@ function createShape(shape) {
 			return myDrawings.Text(shape.textSample, shape.fontSize, shape.font, shape.fill);
 		default:
 			throw new Error(`Shape type '${shape.type}' constructor not handled in factory`);
-	}
-	;
+	};
 };
 
 function retrieveAllTheShapes(success, error) {
 	axios
-		.get('/data')
-		.then(function ({ data, status }) {
-			if (200 === status) {
-				success(data);
-			} else {
-				error('Could not retrieve data');
-			}
-		});
+	  .get('/data')
+	  .then(function ({ data, status }) {
+		  if (200 === status) {
+			  success(data);
+		  } else {
+			  error('Could not retrieve data');
+		  }
+	  });
 };
 
 let drawAllTheShapes = function () {
@@ -101,8 +99,6 @@ shapeTypeSelect.addEventListener('change', function () {
 
 // add event listener on the button
 addShapeBtn.addEventListener('click', function () {
-	// read the shape position
-	
 	let shapeOptions = {
 		type: shapeTypeSelect.value,
 		x: Math.floor(document.getElementById('x').value),
@@ -111,14 +107,14 @@ addShapeBtn.addEventListener('click', function () {
 	
 	let createShape = new DrawingShapes(shapeOptions.x, shapeOptions.y);
 	
-	 switch (shapeTypeSelect.value) {
+	switch (shapeTypeSelect.value) {
 		case 'Circle':
 			Object.assign(shapeOptions, {
 				r: Math.floor(document.getElementById('circleR').value)
 			});
 			createShape.Circle(shapeOptions.r);
 			break;
-			
+		
 		case 'Rectangle':
 			Object.assign(shapeOptions, {
 				width: Math.floor(document.getElementById('rectWidth').value),
@@ -126,23 +122,23 @@ addShapeBtn.addEventListener('click', function () {
 			});
 			createShape.SquareRectangle(shapeOptions.width, shapeOptions.height);
 			break;
-			
+		
 		case 'Square':
 			Object.assign(shapeOptions, {
 				size: Math.floor(document.getElementById('sqSize').value)
 			});
 			createShape.SquareRectangle(shapeOptions.size);
 			break;
-			
+		
 		case 'Line':
 			Object.assign(shapeOptions, {
 				x2: Math.floor(document.getElementById('lineX2').value),
 				y2: Math.floor(document.getElementById('lineY2').value),
 				lineWidth: Math.floor(document.getElementById('lineWidth').value)
 			})
-			createShape.Line(shapeOptions.x2,shapeOptions.y2, shapeOptions.lineWidth);
+			createShape.Line(shapeOptions.x2, shapeOptions.y2, shapeOptions.lineWidth);
 			break;
-			
+		
 		case 'Ark':
 			Object.assign(shapeOptions, {
 				startAngle: Math.floor(document.getElementById('startAngle').value),
@@ -150,24 +146,24 @@ addShapeBtn.addEventListener('click', function () {
 				radius: Math.floor(document.getElementById('radius').value),
 				color: Math.floor(document.getElementById('colorArk').value)
 			});
-			createShape.Ark(shapeOptions.radius, shapeOptions.startAngle,shapeOptions.endAngle, shapeOptions.color);
+			createShape.Ark(shapeOptions.radius, shapeOptions.startAngle, shapeOptions.endAngle, shapeOptions.color);
 			break;
-			
+		
 		case 'Text':
 			Object.assign(shapeOptions, {
 				textToWrite: document.getElementById('textToWrite').value,
 				fill: Math.floor(document.getElementById('textColor').value),
 				fontSize: Math.floor(document.getElementById('fontSize').value)
 			});
-			createShape.Text(shapeOptions.textToWrite,shapeOptions.fontSize, shapeOptions.fill);
+			createShape.Text(shapeOptions.textToWrite, shapeOptions.fontSize, shapeOptions.fill);
 			break;
-			
+		
 		default:
 	}
-	//console.log(JSON.parse(JSON.stringify(shapeOptions)));
+	//axios.post('/data', {"ceva": "altceva"}).then((data, arguments) => {console.log(data, arguments)}).catch(error => {console.log(error)});
 	
-	axios.post('/data', {"ceva": "altceva"}).then((data, arguments) => {console.log(data, arguments)}).catch(error => {console.log(error)});
-	//createShape.Save(shapeOptions)
+	new crudOperator(shapeOptions).Save();
+	//createShape.Save(shapeOptions);
 	
 }, false);
 

@@ -52,5 +52,26 @@
     "r": 50,
     "angleStart": 4,
     "angleEnd": 2
+  },
+  {
+    "type": "Circle",
+    "x": 250,
+    "y": 75,
+    "r": 32
+  },
+  {
+    "type": "Rectangle",
+    "x": 250,
+    "y": 75,
+    "width": 31,
+    "height": 54
+  },
+  {
+    "type": "Text",
+    "x": 250,
+    "y": 75,
+    "textToWrite": "43",
+    "fill": null,
+    "fontSize": 54
   }
 ]
